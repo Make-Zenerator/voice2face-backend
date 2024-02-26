@@ -1,0 +1,5 @@
+celery[redis]
+pymysql
+Flask-SQLAlchemy
+SQLAlchemy
+python-dotenv

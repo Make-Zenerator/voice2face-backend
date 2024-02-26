@@ -1,0 +1,90 @@
+version: '3.8'
+services:
+
+  mysql-db:
+    container_name: mysql-db
+    image: mysql
+    environment:
+      MYSQL_DATABASE: MZ
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: rootpwd
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    expose:
+      - "3303"
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/config:/etc/mysql/conf.d
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3303:3306"
+    restart: always
+
+  backend:
+    restart: unless-stopped
+    container_name: backend
+    build: .
+    ports:
+      - 5050:5050
+    environment:
+      FLASK_DEBUG: 1 #리로딩 설정
+    env_file:
+      .env.dev
+    command: gunicorn -w 1 -b 0.0.0.0:5050 app:app --reload
+    depends_on:
+      - mysql-db
+      - rabbitmq
+
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbit
+    image: "rabbitmq:3-management"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  simple_worker:
+    container_name: simple_worker
+    build: './simple_worker'
+    user: nobody
+    env_file:
+      .env.dev
+    depends_on:
+      - rabbitmq
+      - backend
+
+  # rabbitmq:
+  #   image: "rabbitmq:3-management"
+  #   container_name: rabbitmq
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: "user"
+  #     RABBITMQ_DEFAULT_PASS: "password"
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   volumes:
+  #     - "rabbitmq_data:/var/lib/rabbitmq"
+  #   restart: always
+
+  # celery_worker:
+  #   build: .
+  #   container_name: celery_worker
+  #   command: celery -A mz worker --loglevel=info
+  #   environment:
+  #     - CELERY_BROKER_URL=amqp://user:password@rabbitmq:5672/
+  #     - CELERY_RESULT_BACKEND=db+sqlite:///results.sqlite
+  #   volumes:
+  #     - .:/code
+  #   depends_on:
+  #     - rabbitmq
+  #     - mysql-db
+  #     - backend
+
+volumes:
+  mydb:
+  rabbitmq_data:

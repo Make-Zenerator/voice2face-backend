@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+
+  backend:
+    restart: unless-stopped
+    container_name: backend
+    build: .
+    ports:
+      - 5050:5050
+    env_file:
+      .env.dev
+    environment:
+      FLASK_DEBUG: 1 #리로딩 설정
+    command: gunicorn -w 1 -b 0.0.0.0:5050 app:app --reload
+
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbit
+    image: "rabbitmq:3-management"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  simple_worker:
+    container_name: simple_worker
+    build: './simple_worker'
+    user: nobody
+    env_file:
+      .env.dev
+    depends_on:
+      - rabbitmq
+      - backend
