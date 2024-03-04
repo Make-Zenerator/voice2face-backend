@@ -35,7 +35,7 @@ def read_mz_request(id, user_id):
                 "gender": mz_request.gender,
                 "voice_url": mz_request.voice_url,
                 "status": mz_request.status,
-                "rta": mz_request.rta.isoformat() if mz_request.rta else None,
+                "ata": mz_request.ata.isoformat() if mz_request.ata else None,
                 "created_at": mz_request.created_at.isoformat(),
                 "updated_at": mz_request.updated_at.isoformat() if mz_request.updated_at else None
             }
@@ -68,7 +68,7 @@ def read_mz_request_list(user_id):
                 "gender": mz_request.gender,
                 "voice_url": mz_request.voice_url,
                 "status": mz_request.status,
-                "rta": mz_request.rta.isoformat() if mz_request.rta else None,
+                "ata": mz_request.ata.isoformat() if mz_request.ata else None,
                 "latest_mz_result_id": latest_mz_result.id if latest_mz_result else None,  # 최신 MzResult의 ID 추가
                 "created_at": mz_request.created_at.isoformat() if mz_request.created_at else None,
                 "updated_at": mz_request.updated_at.isoformat() if mz_request.updated_at else None,

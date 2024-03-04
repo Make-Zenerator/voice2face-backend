@@ -34,7 +34,9 @@ class MzRequest(db.Model):
     gender = db.Column(db.String(10), nullable=True)
     voice_url = db.Column(db.String(255), nullable=True)
     status = db.Column(db.Integer, nullable=True)
-    rta = db.Column(db.TIMESTAMP, nullable=True) # 완료시간
+    ata = db.Column(db.TIMESTAMP, nullable=True) # 완료시간
+    # celery_id = 
+    # celery_id = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.TIMESTAMP, nullable=True)
     updated_at = db.Column(db.TIMESTAMP, nullable=True)
     deleted_at = db.Column(db.TIMESTAMP, nullable=True)

@@ -69,6 +69,13 @@ def upload_mz_request():
         print(ex)
         return 400, {"error": str(ex)}
 
+
+# 1. 백엔드에 샐러리 ID가 있다면 샐러리 ID와 요청해야하는 request_id를 함께 넘겨주기
+# 2. 백엔드에서는 result ID로 조회
+#     1) 만약 DB 존재한다면 -> DB에서 찾은 정보 바로 return
+#     2) 존재하지 않는다면 -> status 조회 후 SUCCESS가 나오는 경우, result_db에 저장하고 return
+
+
 """
 * celery status
 * Define a route for getting the status of a task

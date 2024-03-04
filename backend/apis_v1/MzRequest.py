@@ -18,6 +18,7 @@ post_parser = common_parser.copy()
 post_parser.add_argument('age', location='form', required=False)
 post_parser.add_argument('gender', location='form', required=False)
 post_parser.add_argument('file', type=FileStorage, location='files', required=False)
+# celery 받는거, post&get설정, crud_module에 함수 추가, db_module에 함수 추가
 
 @MzRequest.route('')
 @MzRequest.doc(responses={200: 'Success'})
