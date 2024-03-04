@@ -43,8 +43,8 @@ jobs:
           password: ${{secrets.DOCKERHUB_PASSWORD}}
       - name: Build docker file and setting deploy files
         run: |
-          docker build -t makezenerator/backend:lastest .
-          docker push makezenerator/backend:lastest .
+          docker build -t makezenerator/backend:lastest backend/
+          docker push makezenerator/backend:lastest backend/
   cd:
     runs-on: ubuntu-latest
     needs: [ci]
