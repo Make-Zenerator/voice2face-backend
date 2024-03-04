@@ -63,6 +63,7 @@ jobs:
             docker stop $(docker ps -a -q)
             docker rm -f $(docker ps -a -q)
             docker pull makezenerator/backend:lastest
-            docker run -d -p 5050:5050 makezenerator/backend:lastest
+            docker pull makezenerator/simple_worker:lastest
+            # docker run -d -p 5050:5050 makezenerator/backend:lastest
             docker-compose -f /root/voice2face-backend/backend/docker-compose.prod.yml up -d 
             docker image prune -f
