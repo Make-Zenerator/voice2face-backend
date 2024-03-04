@@ -8,7 +8,7 @@ services:
     ports:
       - 5050:5050
     env_file:
-      .env.dev
+      .env.prod
     environment:
       FLASK_DEBUG: 1 #리로딩 설정
     command: gunicorn -w 1 -b 0.0.0.0:5050 app:app --reload
@@ -29,7 +29,7 @@ services:
     image: "makezenerator/simple_worker"
     user: nobody
     env_file:
-      .env.dev
+      .env.prod
     depends_on:
       - rabbitmq
       - backend
