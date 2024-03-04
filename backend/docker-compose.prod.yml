@@ -4,7 +4,7 @@ services:
   backend:
     restart: unless-stopped
     container_name: backend
-    build: .
+    image: "makezenerator/backend"
     ports:
       - 5050:5050
     env_file:
@@ -26,7 +26,7 @@ services:
 
   simple_worker:
     container_name: simple_worker
-    build: './simple_worker'
+    image: "makezenerator/backend/simple_worker"
     user: nobody
     env_file:
       .env.dev
