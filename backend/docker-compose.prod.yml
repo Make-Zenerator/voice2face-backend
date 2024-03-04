@@ -26,7 +26,7 @@ services:
 
   simple_worker:
     container_name: simple_worker
-    image: "makezenerator/backend/simple_worker"
+    image: "makezenerator/simple_worker"
     user: nobody
     env_file:
       .env.dev
