@@ -57,7 +57,7 @@ jobs:
           key: ${{secrets.SERVER_KEY}}
           port: ${{secrets.SERVER_PORT}}
           script: | 
-            docker login -u "${{secrets.DOCKERHUB_USERNAME}}" -p "${{secrets.DOCKERHUB_TOKEN}}"
+            docker login -u "${{secrets.DOCKERHUB_USERNAME}}" -p "${{secrets.DOCKERHUB_PASSWORD}}"
             docker stop $(docker ps -a -q)
             docker rm -f $(docker ps -a -q)
             docker pull makezenerator/backend:lastest
