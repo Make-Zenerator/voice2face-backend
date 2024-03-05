@@ -90,14 +90,6 @@ class UsersClass(Resource):
             print(ex)
             print("******************") 
 
-@Users.route('', methods=['OPTIONS'])
-def preflight():
-    response = flask.Response()
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Headers'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = '*'
-
-    return response
 # @Users.route('/email')
 # @Users.expect(parser)
 # @Users.doc(responses={200: 'Success'})
