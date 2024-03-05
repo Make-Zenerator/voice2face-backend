@@ -90,14 +90,14 @@ class UsersClass(Resource):
             print(ex)
             print("******************") 
 
-    @Users.expect(common_parser)
-    def options(self):
-        response = flask.Response()
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Access-Control-Allow-Headers'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = '*'
+    # @Users.expect(common_parser)
+    # def options(self):
+    #     response = flask.Response()
+    #     response.headers['Access-Control-Allow-Origin'] = '*'
+    #     response.headers['Access-Control-Allow-Headers'] = '*'
+    #     response.headers['Access-Control-Allow-Methods'] = '*'
 
-        return response
+    #     return response
 
 # @Users.route('/email')
 # @Users.expect(parser)
