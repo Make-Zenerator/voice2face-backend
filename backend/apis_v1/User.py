@@ -23,7 +23,7 @@ regist_parser.add_argument('gender', location='form', required=False)
 token_parser = common_parser.copy()
 token_parser.add_argument('token', location='headers')
 
-@Users.route('/email/validation')
+@Users.route('/email/validation', methods=['POST'])
 @Users.doc(response={200: 'SUCCESS'})
 @Users.doc(response={404: 'Failed'})
 class UserEmailValidaionClass(Resource):
@@ -47,7 +47,7 @@ class UserEmailValidaionClass(Resource):
             print(ex)
             print("******************") 
 
-@Users.route('')
+@Users.route('', methods=['POST', 'GET'])
 @Users.doc(response={200: 'SUCCESS'})
 @Users.doc(response={404: 'Failed'})
 class UsersClass(Resource):
