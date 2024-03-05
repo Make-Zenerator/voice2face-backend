@@ -9,7 +9,7 @@ app = Flask(__name__)
 # app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 용량제한
 app.config.update(DEBUG=True)
 
-CORS(app, resources={r'*': {'origins': 'http://localhost:5173'}})
+CORS(app, resources={r'*': {'origins': '*'}}, supports_credentials=True)
 
 db_connection(app)
 with app.app_context():
