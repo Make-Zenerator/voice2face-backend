@@ -90,14 +90,17 @@ class UsersClass(Resource):
             print(ex)
             print("******************") 
 
-    # @Users.expect(common_parser)
-    # def options(self):
-    #     response = flask.Response()
-    #     response.headers['Access-Control-Allow-Origin'] = '*'
-    #     response.headers['Access-Control-Allow-Headers'] = '*'
-    #     response.headers['Access-Control-Allow-Methods'] = '*'
-
-    #     return response
+    @Users.expect()
+    def options(self):
+        """
+        # OPTIONS 메서드 처리
+        # @return : 200
+        """
+        response = Response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Headers'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+        return response
 
 # @Users.route('/email')
 # @Users.expect(parser)
@@ -180,7 +183,7 @@ parser = Auth.parser()
 parser.add_argument('email', location='form')
 parser.add_argument('password', location='form')
 
-@Auth.route('')
+@Auth.route('', methods=['POST'])
 @Auth.expect(parser)
 @Auth.doc(response={200: 'SUCCESS'})
 @Auth.doc(response={404: 'Failed'})
