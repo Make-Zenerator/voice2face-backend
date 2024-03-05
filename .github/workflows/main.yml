@@ -65,5 +65,5 @@ jobs:
             docker pull makezenerator/backend:latest
             docker pull makezenerator/simple_worker:latest
             # docker run -d -p 5050:5050 makezenerator/backend:latest
-            docker-compose -f /root/voice2face-backend/backend/docker-compose.prod.yml up -d 
+            docker compose -f /root/voice2face-backend/backend/docker-compose.prod.yml up -d 
             docker image prune -f
