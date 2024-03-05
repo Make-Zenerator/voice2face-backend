@@ -144,7 +144,7 @@ def read_mz_result(mz_request_id, mz_result_id):
 """
 * mz result image/gif update
 """
-def update_mz_result_image_gif(task_result):
+def update_mz_result_image_gif(mz_request_id, task_result):
     try:
         mz_result = schema.MzResult.query.filter_by(mz_result_id = task_result.result_id)
         if mz_result:

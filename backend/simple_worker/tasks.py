@@ -4,6 +4,7 @@ from celery.utils.log import get_task_logger
 # import requests
 from db_config import USERNAME, PASSWORD, HOST, DATABASE
 import requests
+import module
 
 logger = get_task_logger(__name__)
 
@@ -24,13 +25,29 @@ def run_mz(request_id, result_id, age, gender, file_url):
         if response.status_code == 200: # 성공 시 
             response.request_id = request_id
             response.result_id = result_id
-            
-            return response
+
+            # Update status
+            status_to_change = 'SUCCESS'
+            result, message = module.db_module.update_mz_request_status(request_id, status_to_change)
+            logger.info(message)
+
+            # Update result 
+            result_to_change = {
+                'condition_image_url' : response.condition_image_url,
+                'condition_gif_url' : response.condition_gif_url,
+                'voice_image_url' : response.voice_image_url,
+                'voice_gif_url' : response.voice_image_url
+            }
+            result, message = module.db_module.update_mz_result_image_gif(request_id, result_to_change)
+            logger.info(message)
+
         else: # 실패 시 
-            return None
+            # Update status
+            status_to_change = 'FAILED'
+            result, message = module.db_module.update_mz_request_status(request_id, status_to_change)
+
     except requests.RequestException as e:
         return f'Request failed with exception: {str(e)}'
 
-
     logger.info('Work Finished ')
-    return 200, "SUCCESS", "PERFECT"
+    return response.status_code
