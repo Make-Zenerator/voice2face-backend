@@ -36,8 +36,9 @@ api.add_namespace(MzRequest.MzRequest, '/mz-request')
 @app.route('/auth', methods=['OPTIONS'])
 @app.route('/mz-request', methods=['OPTIONS'])
 def preflight():
-    response = flask.Response("ㅋㅋ")
+    response = flask.Response()
     response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = '*'
 
     return response
 
