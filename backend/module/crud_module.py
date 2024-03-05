@@ -20,7 +20,7 @@ celery.conf.update(
     # Do not ignore results (set to False)
     CELERY_IGNORE_RESULT=False,
 )
-
+REQUEST_LIMIT = 5
 ################### MZ REQUEST ###################
 """
 * TODO mz request upload
@@ -31,7 +31,14 @@ def upload_mz_request():
         user = module.token.get_user(token)
         if user == False:
             return 401, {"error": status_code.token_error}
-        
+        # check the number of requests
+        result, message = count_mz_request_list(user)
+        if result == 200:
+            if message.request_count > REQUEST_LIMIT:
+                return 404, {"error": "The maximum limit of the request has been exceeded."}
+        else:
+            return result, message 
+
         age = request.form.get('age')
         if age == None or not age.isdigit():
             return 404, {"error": f'{status_code.field_error}age'}

@@ -45,7 +45,22 @@ def read_mz_request(id, user_id):
     except Exception as ex:
         print(ex)
         return 400, {"error": str(ex)}  #false->400
-
+"""
+* count mz request which is not failed 
+"""
+def count_mz_request_list(user_id):
+    try:
+        mz_request_list = schema.MzRequest.query.filter(MzRequest.user_id==user_id,
+                                                        MzRequest.deleted_at==None, 
+                                                        MzRequest.status!='FAILED').all()                                            
+        if mz_request_list == None:
+            request_count = 0
+        else:
+            request_count = len(mz_request_list)   
+        return 200, {'request_count' : request_count}
+    except Exception as ex:
+        print(ex)
+        return 400, {"error": str(ex)}  #false->400
 """
 * mz request list read
 """
