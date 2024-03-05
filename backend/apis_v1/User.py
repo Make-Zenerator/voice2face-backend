@@ -90,7 +90,7 @@ class UsersClass(Resource):
             print(ex)
             print("******************") 
 
-    @Users.expect()
+    @Users.expect(common_parser)
     def options(self):
         response = flask.Response()
         response.headers['Access-Control-Allow-Origin'] = '*'
