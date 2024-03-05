@@ -32,14 +32,14 @@ api.add_namespace(User.Users, '/users')
 api.add_namespace(User.Auth, '/auth')
 api.add_namespace(MzRequest.MzRequest, '/mz-request')
 
-@app.route('/users', methods=['OPTIONS'])
-@app.route('/auth', methods=['OPTIONS'])
-@app.route('/mz-request', methods=['OPTIONS'])
-def preflight():
-    response = flask.Response()
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Headers'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = '*'
+# @app.route('/users', methods=['OPTIONS'])
+# @app.route('/auth', methods=['OPTIONS'])
+# @app.route('/mz-request', methods=['OPTIONS'])
+# def preflight():
+#     response = flask.Response()
+#     response.headers['Access-Control-Allow-Origin'] = '*'
+#     response.headers['Access-Control-Allow-Headers'] = '*'
+#     response.headers['Access-Control-Allow-Methods'] = '*'
 
     return response
 

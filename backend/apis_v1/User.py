@@ -47,7 +47,7 @@ class UserEmailValidaionClass(Resource):
             print(ex)
             print("******************") 
 
-@Users.route('', methods=['POST', 'GET'])
+@Users.route('', methods=['POST', 'GET', 'OPTIONS'])
 @Users.doc(response={200: 'SUCCESS'})
 @Users.doc(response={404: 'Failed'})
 class UsersClass(Resource):
@@ -89,6 +89,15 @@ class UsersClass(Resource):
             print("******************")
             print(ex)
             print("******************") 
+
+    @Users.expect()
+    def options(self):
+        response = flask.Response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Headers'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = '*'
+
+        return response
 
 # @Users.route('/email')
 # @Users.expect(parser)
