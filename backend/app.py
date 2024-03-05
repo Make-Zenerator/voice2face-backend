@@ -41,7 +41,7 @@ api.add_namespace(MzRequest.MzRequest, '/mz-request')
 #     response.headers['Access-Control-Allow-Headers'] = '*'
 #     response.headers['Access-Control-Allow-Methods'] = '*'
 
-    return response
+    #return response
 
 if __name__ == "__main__":
     app.run(port=5050, debug=True)
