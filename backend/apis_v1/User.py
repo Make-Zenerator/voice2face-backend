@@ -17,7 +17,7 @@ email_validation_parser.add_argument('email', location='form', required=False)
 regist_parser = common_parser.copy()
 regist_parser.add_argument('email', location='form', required=False)
 regist_parser.add_argument('password', location='form', required=False)
-regist_parser.add_argument('age', location='form', required=False)
+regist_parser.add_argument('age', location='form', required=False, type=int)
 regist_parser.add_argument('gender', location='form', required=False)
 
 token_parser = common_parser.copy()
@@ -99,7 +99,7 @@ class UsersClass(Resource):
         response = Response()
         response.headers['Access-Control-Allow-Origin'] = '*'
         response.headers['Access-Control-Allow-Headers'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+        response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PATCH'
         return response
 
 # @Users.route('/email')
@@ -183,12 +183,12 @@ parser = Auth.parser()
 parser.add_argument('email', location='form')
 parser.add_argument('password', location='form')
 
-@Auth.route('', methods=['POST'])
-@Auth.expect(parser)
+@Auth.route('', methods=['POST', 'OPTIONS'])
 @Auth.doc(response={200: 'SUCCESS'})
 @Auth.doc(response={404: 'Failed'})
 class AuthClass(Resource):
-   
+
+    @Auth.expect(parser)
     def post(self):
         """
         # 로그인
@@ -206,3 +206,15 @@ class AuthClass(Resource):
             print("******************")
             print(ex)
             print("******************")
+
+    @Auth.expect()
+    def options(self):
+        """
+        # OPTIONS 메서드 처리
+        # @return : 200
+        """
+        response = Response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Headers'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PATCH'
+        return response
