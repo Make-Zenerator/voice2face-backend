@@ -32,5 +32,11 @@ api.add_namespace(User.Users, '/users')
 api.add_namespace(User.Auth, '/auth')
 api.add_namespace(MzRequest.MzRequest, '/mz-request')
 
+@app.route('/users', methods=['OPTIONS'])
+@app.route('/auth', methods=['OPTIONS'])
+@app.route('/mz-request', methods=['OPTIONS'])
+def preflight():
+    return '', 204
+
 if __name__ == "__main__":
     app.run(port=5050, debug=True)
