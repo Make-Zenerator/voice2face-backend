@@ -177,7 +177,7 @@ class MzResultClass(Resource):
     @MzRequest.expect(common_parser)
     def get(self, mzRequestId, mzResultId):
         """
-        # mz 결과 정보 리스트 가져오기
+        # mz 결과 정보 가져오기
         # @header : token
         # @return : {"mz_result": result_data}
         """

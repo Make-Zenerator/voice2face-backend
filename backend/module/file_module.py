@@ -8,7 +8,7 @@ import os
 """
 def file_upload(user, collctionName, f):
     try:
-        # 1. lcoal에 파일 저장 - 파일 경로 때문에 저장해야함
+        # 1. local에 파일 저장 - 파일 경로 때문에 저장해야함
         f.save(f.filename)
         
         # 2. 파일명 설정

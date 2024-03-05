@@ -39,7 +39,7 @@ def upload_mz_request():
         if gender == None or (gender != 'man' and gender != 'woman'):
             return 404, {"error": f'{status_code.field_error}gender'}
         status = request.form.get('status')
-        eta = request.form.get('eta')
+        ata = request.form.get('ata')
         
         if 'file' not in request.files:
             return 404, {"error": f'{status_code.field_error}file'} 
@@ -50,10 +50,12 @@ def upload_mz_request():
         file_result, location = file_module.file_upload(user, SchemaName.mzRequest.value, f)
         if file_result == False:
             return 400, location
-        result, message = module.db_module.create_mz_request(user, age, gender, location, status, eta)
+        result, message = module.db_module.create_mz_request(user, age, gender, location, status, ata)
 
         celery_task_id = celery.send_task('tasks.run_mz', kwargs= 
                     {
+                        'request_id' : result['mz_request_id'],
+                        'result_id' : result['mz_result_id'],
                         'age' : age,
                         'gender' : gender,
                         'file_url' : location
@@ -63,6 +65,7 @@ def upload_mz_request():
         print(celery_task_id)
         print("==========================")
         message["celery_task_id"] = str(celery_task_id)
+        message["request_id"] = str(result['mz_request_id'])
 
         return result, message
     except Exception as ex:
@@ -89,8 +92,14 @@ def get_celery_task_status(mz_request_id, task_id):
         result, message = module.db_module.read_mz_request(mz_request_id, user_id)
         if result == 200:
             # Get the status of the task using the task ID
-            task_status = celery.AsyncResult(task_id).status      
-            
+            task_status = celery.AsyncResult(task_id).status
+            # Update status in DB 
+            try:
+                result, message = module.db_module.update_mz_request_status(mz_request_id, task_status)
+            except Exception as ex:
+                print(ex)
+                return 400, {"error": str(ex)}
+
             # Return the task status as a JSON response
             return 200, {'Task Status': task_status}
         else:
@@ -112,8 +121,15 @@ def get_celery_result_done(mz_request_id, task_id):
         result, message = module.db_module.read_mz_request(mz_request_id, user_id)
         if result == 200:
             # Get the result of the task using the task ID
-            task_result = celery.AsyncResult(task_id).result      
+            task_result = celery.AsyncResult(task_id).result
             
+            # Update image and gif in result record
+            try:
+                result, message = module.db_module.update_mz_result_image_gif(task_result)
+            except Exception as ex:
+                print(ex)
+                return 400, {"error": str(ex)}
+
             # Return the task result as a JSON response
             return 200, {'Task Result': task_result}
         else:
