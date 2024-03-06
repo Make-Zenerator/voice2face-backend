@@ -11,7 +11,13 @@ from sqlalchemy import desc
 """
 def create_mz_request(user, age, gender, voice_url, status, ata):
     try:
-        new_mz_request = schema.MzRequest(user, age, gender, voice_url, status, ata, datetime.now())
+        new_mz_request = schema.MzRequest(user_id=user, 
+                                            age=age, 
+                                            gender=gender, 
+                                            voice_url=voice_url, 
+                                            status=status, 
+                                            ata=ata, 
+                                            created_at=datetime.now())
         db.session.add(new_mz_request)
         db.session.commit()
         if new_mz_request.id is not None:
@@ -50,9 +56,9 @@ def read_mz_request(id, user_id):
 """
 def count_mz_request_list(user_id):
     try:
-        mz_request_list = schema.MzRequest.query.filter(MzRequest.user_id==user_id,
-                                                        MzRequest.deleted_at==None, 
-                                                        MzRequest.status!='FAILED').all()                                            
+        mz_request_list = schema.MzRequest.query.filter(schema.MzRequest.user_id==user_id,
+                                                        schema.MzRequest.deleted_at==None, 
+                                                        schema.MzRequest.status!='FAILED').all()                                            
         if mz_request_list == None:
             request_count = 0
         else:
