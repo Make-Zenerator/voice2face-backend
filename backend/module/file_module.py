@@ -6,7 +6,7 @@ import os
 """
 * 파일 업로드
 """
-def file_upload(user, collctionName, f):
+def file_upload(request_id, result_id, collctionName, f):
     try:
         # 1. local에 파일 저장 - 파일 경로 때문에 저장해야함
         f.save(f.filename)
@@ -14,7 +14,7 @@ def file_upload(user, collctionName, f):
         # 2. 파일명 설정
         name, ext = os.path.splitext(f.filename)
         fileTime = datetime.now().strftime('%Y-%m-%d')
-        filename = str(user) + "_" + name + "_" + fileTime + ext
+        filename = str(request_id) + "_" + str(result_id) + "_" + name + "_" + fileTime + ext
         
         # 3. 버킷 연결
         s3 = s3_connection()

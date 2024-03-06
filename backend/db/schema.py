@@ -41,11 +41,10 @@ class MzRequest(db.Model):
     updated_at = db.Column(db.TIMESTAMP, nullable=True)
     deleted_at = db.Column(db.TIMESTAMP, nullable=True)
 
-    def __init__(self, user_id, age, gender, voice_url, status, ata, created_at):
+    def __init__(self, user_id, age, gender, status, ata, created_at):
         self.user_id = user_id
         self.age = age
         self.gender = gender
-        self.voice_url = voice_url
         self.status = status
         self.ata = ata
         self.created_at = created_at
@@ -58,9 +57,7 @@ class MzResult(db.Model):
     voice_image_url = db.Column(db.String(255), nullable=True)
     voice_gif_url = db.Column(db.String(255), nullable=True)
     condition_image_rating = db.Column(db.Integer, nullable=True)
-    condition_gif_rating = db.Column(db.Integer, nullable=True)
     voice_image_rating = db.Column(db.Integer, nullable=True)
-    voice_gif_rating = db.Column(db.Integer, nullable=True)
     condition_image_score = db.Column(db.Float, nullable=True)
     condition_gif_score = db.Column(db.Float, nullable=True)
     voice_image_score = db.Column(db.Float, nullable=True)
