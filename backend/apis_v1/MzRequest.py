@@ -20,7 +20,7 @@ post_parser.add_argument('gender', location='form', required=False)
 post_parser.add_argument('file', type=FileStorage, location='files', required=False)
 # celery 받는거, post&get설정, crud_module에 함수 추가, db_module에 함수 추가
 
-@MzRequest.route('')
+@MzRequest.route('', methods=['POST', 'GET'])
 @MzRequest.doc(responses={200: 'Success'})
 @MzRequest.doc(responses={404: 'Failed'})
 class MzRequestClass(Resource):
@@ -63,7 +63,7 @@ class MzRequestClass(Resource):
             print(ex)
             print("******************")
 
-@MzRequest.route('/<int:mzRequestId>')
+@MzRequest.route('/<int:mzRequestId>', methods=['GET'])
 @MzRequest.doc(responses={200: 'Success'})
 @MzRequest.doc(responses={404: 'Failed'})
 class MzRequestClass(Resource):
@@ -145,7 +145,7 @@ patch_parser.add_argument('voice_image_rating', location='form', required=False)
 patch_parser.add_argument('voice_gif_rating', location='form', required=False)
 # parser.add_argument('file', type=FileStorage, location='files', required=False)
 
-@MzRequest.route('/<int:mzRequestId>/mz-result')
+@MzRequest.route('/<int:mzRequestId>/mz-result', methods=['POST'])
 @MzRequest.doc(responses={200: 'Success'})
 @MzRequest.doc(responses={404: 'Failed'})
 class MzResultClass(Resource):
@@ -169,7 +169,7 @@ class MzResultClass(Resource):
             print(ex)
             print("******************")
 
-@MzRequest.route('/<int:mzRequestId>/mz-result/<int:mzResultId>')
+@MzRequest.route('/<int:mzRequestId>/mz-result/<int:mzResultId>', methods=['GET', 'PATCH'])
 @MzRequest.doc(responses={200: 'Success'})
 @MzRequest.doc(responses={404: 'Failed'})
 class MzResultClass(Resource):

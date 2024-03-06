@@ -32,10 +32,10 @@ def upload_mz_request():
         if user == False:
             return 401, {"error": status_code.token_error}
         # check the number of requests
-        result, message = count_mz_request_list(user)
+        result, message = module.db_module.count_mz_request_list(user)
         if result == 200:
             if message.request_count > REQUEST_LIMIT:
-                return 404, {"error": "The maximum limit of the request has been exceeded."}
+                return 404, {"error": f"{message.request_count}번 요청하였음"}
         else:
             return result, message 
 

@@ -17,7 +17,7 @@ def email_validation():
         if email == None or email == '':
             return 404, {"error": f'{status_code.field_error}email'}
         user = schema.User.query.filter_by(email=email).first()
-        if user is not None:
+        if not user:
             print("This email is already exist")
             return 409, {"error": status_code.user_email_validation_03_already}
         else:
