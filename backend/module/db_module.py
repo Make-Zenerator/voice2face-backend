@@ -9,24 +9,6 @@ from sqlalchemy import desc
 """
 * mz request create
 """
-# def create_mz_request(user, age, gender, status, ata):
-#     try:
-#         new_mz_request = schema.MzRequest(user_id=user, 
-#                                             age=age, 
-#                                             gender=gender, 
-#                                             status=status, 
-#                                             ata=ata, 
-#                                             created_at=datetime.now())
-#         db.session.add(new_mz_request)
-#         db.session.commit()
-#         if new_mz_request.id is not None:
-#             result, mz_result_id = create_mz_result(new_mz_request.id)
-#         return 200, {"mz_request_id" : str(new_mz_request.id), "mz_result_id" : str(mz_result_id)} #true->200
-#     except Exception as ex:
-#         db.session.rollback()
-#         print(ex)
-#         return 400, {"error": str(ex)} #false->400
-
 def create_mz_request(user, age, gender, voice_url, status, ata):
     try:
         new_mz_request = schema.MzRequest(user_id=user, 
@@ -119,29 +101,11 @@ def read_mz_request_list(user_id):
         return 400, {"error": str(ex)}  #false->400
 
 """
-* mz request voice_url update
-"""
-def update_mz_request_voice_url(mz_request_id, location):
-    try:
-        mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first
-        if mz_request:
-            mz_request.voice_url = location
-            mz_request.updated_at = datetime.now()
-            db.session.commit()
-            return 200, {"message": "status updated sucessfully"}
-        else:
-            return 404, {"error": str("Can't find mz request")}
-    except Exception as ex:
-        db.session.rollback()
-        print(ex)
-        return 400, {"error": str(ex)} #false->400
-
-"""
 * mz request status update
 """
 def update_mz_request_status(mz_request_id, task_status):
     try:
-        mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first()
+        mz_request = schema.MzRequest.query.filter_by(mz_result_id = mz_request_id)
         if mz_request:
             mz_request.status = str(task_status)
             mz_request.updated_at = datetime.now()
@@ -203,7 +167,7 @@ def read_mz_result(mz_request_id, mz_result_id):
 """
 def update_mz_result_image_gif(mz_request_id, task_result):
     try:
-        mz_result = schema.MzResult.query.filter_by(mz_request_id = mz_request_id, id = task_result.result_id)
+        mz_result = schema.MzResult.query.filter_by(mz_result_id = task_result.result_id)
         if mz_result:
             mz_result.condition_image_url = task_result.condition_image_url
             mz_result.condition_gif_url = task_result.condition_gif_url
@@ -221,14 +185,14 @@ def update_mz_result_image_gif(mz_request_id, task_result):
 """
 * mz result rating update
 """
-def update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num):
+def update_mz_result_rating(mz_request_id, mz_result_id, condition_image_rating, condition_gif_rating, voice_image_rating, voice_gif_rating):
     try:
         mz_result = schema.MzResult.query.filter_by(mz_request_id = mz_request_id, id=mz_result_id, deleted_at=None).first()
         if mz_result:
-            if rating_type == 'voice':
-                mz_result.voice_image_rating = rating_num
-            elif rating_type == 'condition'
-                mz_result.condition_image_rating = rating_num
+            mz_result.condition_image_rating = condition_image_rating
+            mz_result.condition_gif_rating = condition_gif_rating
+            mz_result.voice_image_rating = voice_image_rating
+            mz_result.voice_gif_rating = voice_gif_rating
             mz_result.updated_at = datetime.now()
             db.session.commit()
             return 200, {"message": "rating updated successfully"} #true->200

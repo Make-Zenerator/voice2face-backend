@@ -49,7 +49,7 @@ def upload_mz_request():
         status = request.form.get('status')
         ata = request.form.get('ata')
         
-         if 'file' not in request.files:
+        if 'file' not in request.files:
             return 404, {"error": f'{status_code.field_error}file'} 
         filename = request.files['file'].filename
         if filename == None or filename == '':
@@ -59,27 +59,11 @@ def upload_mz_request():
         if file_result == False:
             return 400, location
         result, message = module.db_module.create_mz_request(user, age, gender, location, status, ata)
-        # result, message = module.db_module.create_mz_request(user, age, gender, status, ata)
-        # request_id = message['mz_request_id']
-        # result_id = message['mz_result_id']
-
-        # if 'file' not in request.files:
-        #     return 404, {"error": f'{status_code.field_error}file'} 
-        # filename = request.files['file'].filename
-        # if filename == None or filename == '':
-        #     return 404, {"error": f'{status_code.field_error}file'}
-        # f = request.files['file']
-        # file_result, location = file_module.file_upload(mz_request_id, result_id, SchemaName.mzRequest.value, f)
-        # if file_result == False:
-        #     return 400, location
-
-        # _, _ = module.db_module.update_mz_request_voice_url(request_id, location)
-
 
         celery_task_id = celery.send_task('tasks.run_mz', kwargs= 
                     {
-                        'request_id' : request_id,
-                        'result_id' : result_id,
+                        'request_id' : message['mz_request_id'],
+                        'result_id' : message['mz_result_id'],
                         'age' : age,
                         'gender' : gender,
                         'file_url' : location
@@ -166,14 +150,20 @@ def update_mz_result_rating(mz_request_id, mz_result_id):
         if user_id == False:
             return 401, {"error": status_code.token_error}
         
-        rating_type = request.form.get('type')
-        if rating_type != 'voice' and rating_type != 'condition':
-            return 404, {"error": f'{status_code.field_error}rating_type'}
-        rating_num = request.form.get('rating')
-        if rating_num == None or not rating_num():
-            return 404, {"error": f'{status_code.field_error}rating_num'}
+        condition_image_rating = request.form.get('condition_image_rating')
+        if condition_image_rating == None or not condition_image_rating.isdigit():
+            return 404, {"error": f'{status_code.field_error}condition_image_rating'}
+        condition_gif_rating = request.form.get('condition_gif_rating')
+        if condition_gif_rating == None or not condition_gif_rating.isdigit():
+            return 404, {"error": f'{status_code.field_error}condition_gif_rating'}
+        voice_image_rating = request.form.get('voice_image_rating')
+        if voice_image_rating == None or not voice_image_rating.isdigit():
+            return 404, {"error": f'{status_code.field_error}voice_image_rating'}
+        voice_gif_rating = request.form.get('voice_gif_rating')
+        if voice_gif_rating == None or not voice_gif_rating.isdigit():
+            return 404, {"error": f'{status_code.field_error}voice_gif_rating'}
 
-        result, message = module.db_module.update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num)
+        result, message = module.db_module.update_mz_result_rating(mz_request_id, mz_result_id, condition_image_rating, condition_gif_rating, voice_image_rating, voice_gif_rating)
         return result, message
     except Exception as ex:
         print(ex)
