@@ -9,11 +9,30 @@ from sqlalchemy import desc
 """
 * mz request create
 """
-def create_mz_request(user, age, gender, status, ata):
+# def create_mz_request(user, age, gender, status, ata):
+#     try:
+#         new_mz_request = schema.MzRequest(user_id=user, 
+#                                             age=age, 
+#                                             gender=gender, 
+#                                             status=status, 
+#                                             ata=ata, 
+#                                             created_at=datetime.now())
+#         db.session.add(new_mz_request)
+#         db.session.commit()
+#         if new_mz_request.id is not None:
+#             result, mz_result_id = create_mz_result(new_mz_request.id)
+#         return 200, {"mz_request_id" : str(new_mz_request.id), "mz_result_id" : str(mz_result_id)} #true->200
+#     except Exception as ex:
+#         db.session.rollback()
+#         print(ex)
+#         return 400, {"error": str(ex)} #false->400
+
+def create_mz_request(user, age, gender, voice_url, status, ata):
     try:
         new_mz_request = schema.MzRequest(user_id=user, 
                                             age=age, 
                                             gender=gender, 
+                                            voice_url=voice_url, 
                                             status=status, 
                                             ata=ata, 
                                             created_at=datetime.now())

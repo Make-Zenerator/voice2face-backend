@@ -49,21 +49,32 @@ def upload_mz_request():
         status = request.form.get('status')
         ata = request.form.get('ata')
         
-        result, message = module.db_module.create_mz_request(user, age, gender, status, ata)
-        request_id = message['mz_request_id']
-        result_id = message['mz_result_id']
-
-        if 'file' not in request.files:
+         if 'file' not in request.files:
             return 404, {"error": f'{status_code.field_error}file'} 
         filename = request.files['file'].filename
         if filename == None or filename == '':
             return 404, {"error": f'{status_code.field_error}file'}
         f = request.files['file']
-        file_result, location = file_module.file_upload(mz_request_id, result_id, SchemaName.mzRequest.value, f)
+        file_result, location = file_module.file_upload(user, SchemaName.mzRequest.value, f)
         if file_result == False:
             return 400, location
+        result, message = module.db_module.create_mz_request(user, age, gender, location, status, ata)
+        # result, message = module.db_module.create_mz_request(user, age, gender, status, ata)
+        # request_id = message['mz_request_id']
+        # result_id = message['mz_result_id']
 
-        _, _ = module.db_module.update_mz_request_voice_url(request_id, location)
+        # if 'file' not in request.files:
+        #     return 404, {"error": f'{status_code.field_error}file'} 
+        # filename = request.files['file'].filename
+        # if filename == None or filename == '':
+        #     return 404, {"error": f'{status_code.field_error}file'}
+        # f = request.files['file']
+        # file_result, location = file_module.file_upload(mz_request_id, result_id, SchemaName.mzRequest.value, f)
+        # if file_result == False:
+        #     return 400, location
+
+        # _, _ = module.db_module.update_mz_request_voice_url(request_id, location)
+
 
         celery_task_id = celery.send_task('tasks.run_mz', kwargs= 
                     {

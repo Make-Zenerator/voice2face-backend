@@ -27,6 +27,28 @@ class User(db.Model):
         self.gender = gender
         self.created_at = created_at
 
+# class MzRequest(db.Model):
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+#     age = db.Column(db.Integer, nullable=True)
+#     gender = db.Column(db.String(10), nullable=True)
+#     voice_url = db.Column(db.String(255), nullable=True)
+#     status = db.Column(db.String(10), nullable=True)
+#     ata = db.Column(db.TIMESTAMP, nullable=True) # 완료시간
+#     # celery_id = 
+#     # celery_id = db.Column(db.String(255), nullable=True)
+#     created_at = db.Column(db.TIMESTAMP, nullable=True)
+#     updated_at = db.Column(db.TIMESTAMP, nullable=True)
+#     deleted_at = db.Column(db.TIMESTAMP, nullable=True)
+
+#     def __init__(self, user_id, age, gender, status, ata, created_at):
+#         self.user_id = user_id
+#         self.age = age
+#         self.gender = gender
+#         self.status = status
+#         self.ata = ata
+#         self.created_at = created_at
+
 class MzRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
@@ -41,10 +63,11 @@ class MzRequest(db.Model):
     updated_at = db.Column(db.TIMESTAMP, nullable=True)
     deleted_at = db.Column(db.TIMESTAMP, nullable=True)
 
-    def __init__(self, user_id, age, gender, status, ata, created_at):
+    def __init__(self, user_id, age, gender, voice_url, status, ata, created_at):
         self.user_id = user_id
         self.age = age
         self.gender = gender
+        self.voice_url = voice_url
         self.status = status
         self.ata = ata
         self.created_at = created_at
