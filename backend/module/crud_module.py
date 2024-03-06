@@ -20,7 +20,7 @@ celery.conf.update(
     # Do not ignore results (set to False)
     CELERY_IGNORE_RESULT=False,
 )
-
+REQUEST_LIMIT = 5
 ################### MZ REQUEST ###################
 """
 * TODO mz request upload
@@ -31,7 +31,14 @@ def upload_mz_request():
         user = module.token.get_user(token)
         if user == False:
             return 401, {"error": status_code.token_error}
-        
+        # check the number of requests
+        result, message = count_mz_request_list(user)
+        if result == 200:
+            if message.request_count > REQUEST_LIMIT:
+                return 404, {"error": "The maximum limit of the request has been exceeded."}
+        else:
+            return result, message 
+
         age = request.form.get('age')
         if age == None or not age.isdigit():
             return 404, {"error": f'{status_code.field_error}age'}
@@ -39,7 +46,7 @@ def upload_mz_request():
         if gender == None or (gender != 'man' and gender != 'woman'):
             return 404, {"error": f'{status_code.field_error}gender'}
         status = request.form.get('status')
-        eta = request.form.get('eta')
+        ata = request.form.get('ata')
         
         if 'file' not in request.files:
             return 404, {"error": f'{status_code.field_error}file'} 
@@ -50,10 +57,12 @@ def upload_mz_request():
         file_result, location = file_module.file_upload(user, SchemaName.mzRequest.value, f)
         if file_result == False:
             return 400, location
-        result, message = module.db_module.create_mz_request(user, age, gender, location, status, eta)
+        result, message = module.db_module.create_mz_request(user, age, gender, location, status, ata)
 
         celery_task_id = celery.send_task('tasks.run_mz', kwargs= 
                     {
+                        'request_id' : message['mz_request_id'],
+                        'result_id' : message['mz_result_id'],
                         'age' : age,
                         'gender' : gender,
                         'file_url' : location
@@ -65,59 +74,6 @@ def upload_mz_request():
         message["celery_task_id"] = str(celery_task_id)
 
         return result, message
-    except Exception as ex:
-        print(ex)
-        return 400, {"error": str(ex)}
-
-
-# 1. 백엔드에 샐러리 ID가 있다면 샐러리 ID와 요청해야하는 request_id를 함께 넘겨주기
-# 2. 백엔드에서는 result ID로 조회
-#     1) 만약 DB 존재한다면 -> DB에서 찾은 정보 바로 return
-#     2) 존재하지 않는다면 -> status 조회 후 SUCCESS가 나오는 경우, result_db에 저장하고 return
-
-
-"""
-* celery status
-* Define a route for getting the status of a task
-"""
-def get_celery_task_status(mz_request_id, task_id):
-    try:
-        token = request.headers.get("Token")
-        user_id = module.token.get_user(token)
-        if user_id == False:
-            return 401, {"error": status_code.token_error}
-        result, message = module.db_module.read_mz_request(mz_request_id, user_id)
-        if result == 200:
-            # Get the status of the task using the task ID
-            task_status = celery.AsyncResult(task_id).status      
-            
-            # Return the task status as a JSON response
-            return 200, {'Task Status': task_status}
-        else:
-            return 400, {'Cannot find mz_request'}
-    except Exception as ex:
-        print(ex)
-        return 400, {"error": str(ex)}
-
-"""
-* celery result
-* Define a route for getting the result of a completed task
-"""
-def get_celery_result_done(mz_request_id, task_id):
-    try:
-        token = request.headers.get("Token")
-        user_id = module.token.get_user(token)
-        if user_id == False:
-            return 401, {"error": status_code.token_error}
-        result, message = module.db_module.read_mz_request(mz_request_id, user_id)
-        if result == 200:
-            # Get the result of the task using the task ID
-            task_result = celery.AsyncResult(task_id).result      
-            
-            # Return the task result as a JSON response
-            return 200, {'Task Result': task_result}
-        else:
-            return 400, {'Cannot find mz_request'}
     except Exception as ex:
         print(ex)
         return 400, {"error": str(ex)}
@@ -211,6 +167,72 @@ def update_mz_result_rating(mz_request_id, mz_result_id):
     except Exception as ex:
         print(ex)
         return 400, {"error": str(ex)}
+
+
+# 1. 백엔드에 샐러리 ID가 있다면 샐러리 ID와 요청해야하는 request_id를 함께 넘겨주기
+# 2. 백엔드에서는 result ID로 조회
+#     1) 만약 DB 존재한다면 -> DB에서 찾은 정보 바로 return
+#     2) 존재하지 않는다면 -> status 조회 후 SUCCESS가 나오는 경우, result_db에 저장하고 return
+
+
+# """
+# * celery status
+# * Define a route for getting the status of a task
+# """
+# def get_celery_task_status(mz_request_id, task_id):
+#     try:
+#         token = request.headers.get("Token")
+#         user_id = module.token.get_user(token)
+#         if user_id == False:
+#             return 401, {"error": status_code.token_error}
+#         result, message = module.db_module.read_mz_request(mz_request_id, user_id)
+#         if result == 200:
+#             # Get the status of the task using the task ID
+#             task_status = celery.AsyncResult(task_id).status
+#             # Update status in DB 
+#             try:
+#                 result, message = module.db_module.update_mz_request_status(mz_request_id, task_status)
+#             except Exception as ex:
+#                 print(ex)
+#                 return 400, {"error": str(ex)}
+
+#             # Return the task status as a JSON response
+#             return 200, {'Task Status': task_status}
+#         else:
+#             return 400, {'Cannot find mz_request'}
+#     except Exception as ex:
+#         print(ex)
+#         return 400, {"error": str(ex)}
+
+# """
+# * celery result
+# * Define a route for getting the result of a completed task
+# """
+# def get_celery_result_done(mz_request_id, task_id):
+#     try:
+#         token = request.headers.get("Token")
+#         user_id = module.token.get_user(token)
+#         if user_id == False:
+#             return 401, {"error": status_code.token_error}
+#         result, message = module.db_module.read_mz_request(mz_request_id, user_id)
+#         if result == 200:
+#             # Get the result of the task using the task ID
+#             task_result = celery.AsyncResult(task_id).result
+            
+#             # Update image and gif in result record
+#             try:
+#                 result, message = module.db_module.update_mz_result_image_gif(task_result)
+#             except Exception as ex:
+#                 print(ex)
+#                 return 400, {"error": str(ex)}
+
+#             # Return the task result as a JSON response
+#             return 200, {'Task Result': task_result}
+#         else:
+#             return 400, {'Cannot find mz_request'}
+#     except Exception as ex:
+#         print(ex)
+#         return 400, {"error": str(ex)}
 
 # """
 # * Whitelist face image delete

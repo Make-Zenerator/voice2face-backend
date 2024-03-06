@@ -9,9 +9,9 @@ from sqlalchemy import desc
 """
 * mz request create
 """
-def create_mz_request(user, age, gender, voice_url, status, eta):
+def create_mz_request(user, age, gender, voice_url, status, ata):
     try:
-        new_mz_request = schema.MzRequest(user, age, gender, voice_url, status, eta, datetime.now())
+        new_mz_request = schema.MzRequest(user, age, gender, voice_url, status, ata, datetime.now())
         db.session.add(new_mz_request)
         db.session.commit()
         if new_mz_request.id is not None:
@@ -45,7 +45,22 @@ def read_mz_request(id, user_id):
     except Exception as ex:
         print(ex)
         return 400, {"error": str(ex)}  #false->400
-
+"""
+* count mz request which is not failed 
+"""
+def count_mz_request_list(user_id):
+    try:
+        mz_request_list = schema.MzRequest.query.filter(MzRequest.user_id==user_id,
+                                                        MzRequest.deleted_at==None, 
+                                                        MzRequest.status!='FAILED').all()                                            
+        if mz_request_list == None:
+            request_count = 0
+        else:
+            request_count = len(mz_request_list)   
+        return 200, {'request_count' : request_count}
+    except Exception as ex:
+        print(ex)
+        return 400, {"error": str(ex)}  #false->400
 """
 * mz request list read
 """
@@ -78,6 +93,25 @@ def read_mz_request_list(user_id):
     except Exception as ex:
         print(ex)
         return 400, {"error": str(ex)}  #false->400
+
+"""
+* mz request status update
+"""
+def update_mz_request_status(mz_request_id, task_status):
+    try:
+        mz_request = schema.MzRequest.query.filter_by(mz_result_id = mz_request_id)
+        if mz_request:
+            mz_request.status = str(task_status)
+            mz_request.updated_at = datetime.now()
+            db.session.commit()
+            return 200, {"message": "status updated sucessfully"}
+        else:
+            return 404, {"error": str("Can't find mz request")}
+    except Exception as ex:
+        db.session.rollback()
+        print(ex)
+        return 400, {"error": str(ex)} #false->400
+
 
 ################### MZ RESULT ###################
 """
@@ -122,6 +156,26 @@ def read_mz_result(mz_request_id, mz_result_id):
         print(ex)
         return 400, {"error": str(ex)} #false->400
 
+"""
+* mz result image/gif update
+"""
+def update_mz_result_image_gif(mz_request_id, task_result):
+    try:
+        mz_result = schema.MzResult.query.filter_by(mz_result_id = task_result.result_id)
+        if mz_result:
+            mz_result.condition_image_url = task_result.condition_image_url
+            mz_result.condition_gif_url = task_result.condition_gif_url
+            mz_result.voice_image_url = task_result.voice_image_url
+            mz_result.voice_gif_url = task_result.voice_gif_url
+            mz_result.updated_at = datetime.now()
+            db.session.commit()
+            return 200, {"message": "image and gif updated sucessfully"}
+        else:
+            return 404, {"error": str("Can't find mz result")}
+    except Exception as ex:
+        db.session.rollback()
+        print(ex)
+        return 400, {"error": str(ex)} #false->400
 """
 * mz result rating update
 """
