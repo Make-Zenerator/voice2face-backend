@@ -150,20 +150,14 @@ def update_mz_result_rating(mz_request_id, mz_result_id):
         if user_id == False:
             return 401, {"error": status_code.token_error}
         
-        condition_image_rating = request.form.get('condition_image_rating')
-        if condition_image_rating == None or not condition_image_rating.isdigit():
-            return 404, {"error": f'{status_code.field_error}condition_image_rating'}
-        condition_gif_rating = request.form.get('condition_gif_rating')
-        if condition_gif_rating == None or not condition_gif_rating.isdigit():
-            return 404, {"error": f'{status_code.field_error}condition_gif_rating'}
-        voice_image_rating = request.form.get('voice_image_rating')
-        if voice_image_rating == None or not voice_image_rating.isdigit():
-            return 404, {"error": f'{status_code.field_error}voice_image_rating'}
-        voice_gif_rating = request.form.get('voice_gif_rating')
-        if voice_gif_rating == None or not voice_gif_rating.isdigit():
-            return 404, {"error": f'{status_code.field_error}voice_gif_rating'}
+        rating_type = request.form.get('type')
+        if rating_type != 'voice' and rating_type != 'condition':
+            return 404, {"error": f'{status_code.field_error}rating_type'}
+        rating_num = request.form.get('rating')
+        if rating_num == None or not rating_num():
+            return 404, {"error": f'{status_code.field_error}rating_num'}
 
-        result, message = module.db_module.update_mz_result_rating(mz_request_id, mz_result_id, condition_image_rating, condition_gif_rating, voice_image_rating, voice_gif_rating)
+        result, message = module.db_module.update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num)
         return result, message
     except Exception as ex:
         print(ex)

@@ -105,7 +105,7 @@ def read_mz_request_list(user_id):
 """
 def update_mz_request_status(mz_request_id, task_status):
     try:
-        mz_request = schema.MzRequest.query.filter_by(mz_result_id = mz_request_id)
+        mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first()
         if mz_request:
             mz_request.status = str(task_status)
             mz_request.updated_at = datetime.now()
@@ -167,7 +167,7 @@ def read_mz_result(mz_request_id, mz_result_id):
 """
 def update_mz_result_image_gif(mz_request_id, task_result):
     try:
-        mz_result = schema.MzResult.query.filter_by(mz_result_id = task_result.result_id)
+        mz_result = schema.MzResult.query.filter_by(mz_request_id = mz_request_id, id = task_result.result_id)
         if mz_result:
             mz_result.condition_image_url = task_result.condition_image_url
             mz_result.condition_gif_url = task_result.condition_gif_url
@@ -185,14 +185,14 @@ def update_mz_result_image_gif(mz_request_id, task_result):
 """
 * mz result rating update
 """
-def update_mz_result_rating(mz_request_id, mz_result_id, condition_image_rating, condition_gif_rating, voice_image_rating, voice_gif_rating):
+def update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num):
     try:
         mz_result = schema.MzResult.query.filter_by(mz_request_id = mz_request_id, id=mz_result_id, deleted_at=None).first()
         if mz_result:
-            mz_result.condition_image_rating = condition_image_rating
-            mz_result.condition_gif_rating = condition_gif_rating
-            mz_result.voice_image_rating = voice_image_rating
-            mz_result.voice_gif_rating = voice_gif_rating
+            if rating_type == 'voice':
+                mz_result.voice_image_rating = rating_num
+            elif rating_type == 'condition'
+                mz_result.condition_image_rating = rating_num
             mz_result.updated_at = datetime.now()
             db.session.commit()
             return 200, {"message": "rating updated successfully"} #true->200
