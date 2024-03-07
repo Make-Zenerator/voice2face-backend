@@ -58,7 +58,7 @@ def create_users():
         pwHash = hashlib.sha256(password.encode('utf-8')).hexdigest()
         
         # Creating a new User instance
-        new_user = schema.User(email=email, password=pwHash, age=age, gender=gender, created_at=datetime.now())
+        new_user = schema.User(email=email, password=pwHash, age=age, gender=gender, created_at=datetime.now(timezone('Asia/Seoul')))
         
         # Adding the new user to the session and committing to the database
         db.session.add(new_user)

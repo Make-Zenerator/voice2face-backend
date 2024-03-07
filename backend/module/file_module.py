@@ -13,7 +13,7 @@ def file_upload(request_id, result_id, collctionName, f):
         
         # 2. 파일명 설정
         name, ext = os.path.splitext(f.filename)
-        fileTime = datetime.now().strftime('%Y-%m-%d')
+        fileTime = datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d')
         filename = f"{int(request_id):05}" + "_" + f"{int(result_id):05}" + "_" + name + "_" + fileTime + ext
         
         # 3. 버킷 연결

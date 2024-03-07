@@ -17,7 +17,7 @@ def create_mz_request(user, age, gender, voice_url, status, ata):
                                             voice_url=voice_url,
                                             status=status, 
                                             ata=ata, 
-                                            created_at=datetime.now())
+                                            created_at=datetime.now(timezone('Asia/Seoul')))
         db.session.add(new_mz_request)
         db.session.commit()
         if new_mz_request.id is not None:
@@ -108,7 +108,7 @@ def update_mz_request_voice_url(mz_request_id, location):
         mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first()
         if mz_request:
             mz_request.voice_url = location
-            mz_request.updated_at = datetime.now()
+            mz_request.updated_at = datetime.now(timezone('Asia/Seoul'))
             db.session.commit()
             return 200, {"message": "status updated sucessfully"}
         else:
@@ -144,7 +144,7 @@ def update_mz_request_status(mz_request_id, task_status):
 """
 def create_mz_result(mz_request_id):
     try:
-        new_mz_result = schema.MzResult(mz_request_id, datetime.now())
+        new_mz_result = schema.MzResult(mz_request_id, datetime.now(timezone('Asia/Seoul')))
         db.session.add(new_mz_result)
         db.session.commit()
         return 200, new_mz_result.id #true->200
@@ -192,7 +192,7 @@ def update_mz_result_image_gif(mz_request_id, task_result):
             mz_result.condition_gif_url = task_result.condition_gif_url
             mz_result.voice_image_url = task_result.voice_image_url
             mz_result.voice_gif_url = task_result.voice_gif_url
-            mz_result.updated_at = datetime.now()
+            mz_result.updated_at = datetime.now(timezone('Asia/Seoul'))
             db.session.commit()
             return 200, {"message": "image and gif updated sucessfully"}
         else:
@@ -212,7 +212,7 @@ def update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num
                 mz_result.voice_image_rating = rating_num
             elif rating_type == 'condition':
                 mz_result.condition_image_rating = rating_num
-            mz_result.updated_at = datetime.now()
+            mz_result.updated_at = datetime.now(timezone('Asia/Seoul'))
             db.session.commit()
             return 200, {"message": "rating updated successfully"} #true->200
         else:
