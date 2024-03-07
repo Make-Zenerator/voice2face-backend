@@ -46,10 +46,11 @@ def upload_mz_request():
         gender = request.form.get('gender')
         if gender == None or (gender != 'man' and gender != 'woman'):
             return 404, {"error": f'{status_code.field_error}gender'}
+        voice_url = None
         status = request.form.get('status')
         ata = request.form.get('ata')
         
-        result, message = module.db_module.create_mz_request(user, age, gender, status, ata)
+        result, message = module.db_module.create_mz_request(user, age, gender, voice_url, status, ata)
         request_id = message['mz_request_id']
         result_id = message['mz_result_id']
 

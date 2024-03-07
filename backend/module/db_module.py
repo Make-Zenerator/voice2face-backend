@@ -9,11 +9,12 @@ from sqlalchemy import desc
 """
 * mz request create
 """
-def create_mz_request(user, age, gender, status, ata):
+def create_mz_request(user, age, gender, voice_url, status, ata):
     try:
         new_mz_request = schema.MzRequest(user_id=user, 
                                             age=age, 
                                             gender=gender, 
+                                            voice_url=voice_url,
                                             status=status, 
                                             ata=ata, 
                                             created_at=datetime.now())
@@ -98,13 +99,13 @@ def read_mz_request_list(user_id):
     except Exception as ex:
         print(ex)
         return 400, {"error": str(ex)}  #false->400
-        
+
 """
 * mz request voice_url update
 """
 def update_mz_request_voice_url(mz_request_id, location):
     try:
-        mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first
+        mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first()
         if mz_request:
             mz_request.voice_url = location
             mz_request.updated_at = datetime.now()

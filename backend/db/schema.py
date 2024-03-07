@@ -41,11 +41,11 @@ class MzRequest(db.Model):
     updated_at = db.Column(db.TIMESTAMP, nullable=True)
     deleted_at = db.Column(db.TIMESTAMP, nullable=True)
 
-    def __init__(self, user_id, age, gender, status, ata, created_at):
+    def __init__(self, user_id, age, gender, voice_url, status, ata, created_at):
         self.user_id = user_id
         self.age = age
         self.gender = gender
-        # self.voice_url = voice_url
+        self.voice_url = voice_url
         self.status = status
         self.ata = ata
         self.created_at = created_at
