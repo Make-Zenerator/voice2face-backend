@@ -191,7 +191,7 @@ def update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num
         if mz_result:
             if rating_type == 'voice':
                 mz_result.voice_image_rating = rating_num
-            elif rating_type == 'condition'
+            elif rating_type == 'condition':
                 mz_result.condition_image_rating = rating_num
             mz_result.updated_at = datetime.now()
             db.session.commit()
