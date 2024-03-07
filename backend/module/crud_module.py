@@ -125,6 +125,11 @@ def regenerate_mz_result(mz_request_id):
         user_id = module.token.get_user(token)
         if user_id == False:
             return 401, {"error": status_code.token_error}
+        # 다시 생성중으로 변경 
+        result, message = module.db_module.update_mz_request_status(mz_request_id, None)
+        if result != 200:
+            return result, message
+
         result, mz_result_id = module.db_module.create_mz_result(mz_request_id)
         return result, {"mz_request_id" : str(mz_request_id), "regenerate_mz_result_id" : str(mz_result_id)}
     except Exception as ex:
