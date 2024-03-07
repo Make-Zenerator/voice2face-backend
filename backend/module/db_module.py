@@ -4,6 +4,7 @@ from static import status_code
 from db import schema
 from db.db_connection import db
 from sqlalchemy import desc
+from pytz import timezone
 
 ################### MZ REQUEST ###################
 """
@@ -108,7 +109,7 @@ def update_mz_request_voice_url(mz_request_id, location):
         mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first()
         if mz_request:
             mz_request.voice_url = location
-            mz_request.updated_at = datetime.now(timezone('Asia/Seoul'))
+            # mz_request.updated_at = datetime.now(timezone('Asia/Seoul'))
             db.session.commit()
             return 200, {"message": "status updated sucessfully"}
         else:
