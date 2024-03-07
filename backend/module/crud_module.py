@@ -154,7 +154,7 @@ def update_mz_result_rating(mz_request_id, mz_result_id):
         if rating_type != 'voice' and rating_type != 'condition':
             return 404, {"error": f'{status_code.field_error}rating_type'}
         rating_num = request.form.get('rating')
-        if rating_num == None or not rating_num():
+        if rating_num == None or not rating_num.isdigit():
             return 404, {"error": f'{status_code.field_error}rating_num'}
 
         result, message = module.db_module.update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num)
