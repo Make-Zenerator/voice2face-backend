@@ -58,17 +58,70 @@ class MzResult(db.Model):
     voice_image_url = db.Column(db.String(255), nullable=True)
     voice_gif_url = db.Column(db.String(255), nullable=True)
     condition_image_rating = db.Column(db.Integer, nullable=True)
-    condition_gif_rating = db.Column(db.Integer, nullable=True)
+    #condition_gif_rating = db.Column(db.Integer, nullable=True)
     voice_image_rating = db.Column(db.Integer, nullable=True)
-    voice_gif_rating = db.Column(db.Integer, nullable=True)
+    #voice_gif_rating = db.Column(db.Integer, nullable=True)
     condition_image_score = db.Column(db.Float, nullable=True)
     condition_gif_score = db.Column(db.Float, nullable=True)
     voice_image_score = db.Column(db.Float, nullable=True)
     voice_gif_score = db.Column(db.Float, nullable=True)
+    survey = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.TIMESTAMP, nullable=False)
     updated_at = db.Column(db.TIMESTAMP, nullable=True)
     deleted_at = db.Column(db.TIMESTAMP, nullable=True)
 
     def __init__(self, mz_request_id, created_at):
         self.mz_request_id = mz_request_id
+        self.created_at = created_at
+
+class MzSurvey(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    mz_result_id = db.Column(db.Integer, db.ForeignKey('mz_result.id'), nullable=False)
+    user_phone = db.Column(db.String(50), nullable=True)
+    sns_time = db.Column(db.Integer, nullable=False)
+    image_rating_reason = db.Column(db.Text, nullable=True)
+    voice_to_face_rating = db.Column(db.Integer, nullable=False)
+    dissatisfy_reason = db.Column(db.String(10), nullable=True) # 복수 선택
+    additional_function = db.Column(db.Text, nullable=True)
+    face_to_gif_rating = db.Column(db.Integer, nullable=False)
+    more_gif = db.Column(db.Boolean, nullable=False)
+    more_gif_type = db.Column(db.String(10), nullable=True) # 복수 선택
+    waiting = db.Column(db.Boolean, nullable=False)
+    waiting_improvement = db.Column(db.Integer, nullable=False)
+    recommend = db.Column(db.Boolean, nullable=False)
+    opinion = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.TIMESTAMP, nullable=False)
+    updated_at = db.Column(db.TIMESTAMP, nullable=True)
+    deleted_at = db.Column(db.TIMESTAMP, nullable=True)
+
+    def __init__(self, 
+                mz_result_id, 
+                user_phone,
+                sns_time, 
+                image_rating_reason,
+                voice_to_face_rating,
+                dissatisfy_reason,
+                additional_function,
+                face_to_gif_rating,
+                more_gif,
+                more_gif_type,
+                waiting,
+                waiting_improvement,
+                recommend,
+                opinion, 
+                created_at):
+        self.mz_result_id = mz_result_id
+        self.user_phone = user_phone
+        self.sns_time = sns_time 
+        self.image_rating_reason = image_rating_reason
+        self.voice_to_face_rating = voice_to_face_rating
+        self.dissatisfy_reason = dissatisfy_reason
+        self.additional_function = additional_function
+        self.face_to_gif_rating = face_to_gif_rating
+        self.more_gif = more_gif
+        self.more_gif_type = more_gif_type
+        self.waiting = waiting
+        self.waiting_improvement = waiting_improvement
+        self.recommend = recommend
+        self.opinion = opinion
         self.created_at = created_at
