@@ -184,34 +184,16 @@ def upload_mz_survey(mz_request_id, mz_result_id):
 
         user_phone = request.form.get('user_phone')
         sns_time = request.form.get('sns_time')
-        if sns_time == None or not sns_time.isdigit():
-            return 404, {"error": f'{status_code.field_error}sns_time'}
-
         image_rating_reason = request.form.get('image_rating_reason')
-        voice_to_face_rating = request.form.get('voice_to_face_rating')
-        if voice_to_face_rating == None or not voice_to_face_rating.isdigit():
-            return 404, {"error": f'{status_code.field_error}voice_to_face_rating'} 
+        voice_to_face_rating = request.form.get('voice_to_face_rating') 
         dissatisfy_reason = request.form.get('dissatisfy_reason')
         additional_function = request.form.get('additional_function')
-
         face_to_gif_rating = request.form.get('face_to_gif_rating')
-        if face_to_gif_rating == None or not face_to_gif_rating.isdigit():
-            return 404, {"error": f'{status_code.field_error}face_to_gif_rating'}
         more_gif = request.form.get('more_gif')
-        if more_gif == None:
-            return 404, {"error": f'{status_code.field_error}more_gif'}
         more_gif_type = request.form.get('more_gif_type')
-        
         waiting = request.form.get('waiting')
-        if waiting == None:
-            return 404, {"error": f'{status_code.field_error}waiting'}
         waiting_improvement = request.form.get('waiting_improvement')
-        if waiting_improvement == None or not waiting_improvement.isdigit():
-            return 404, {"error": f'{status_code.field_error}waiting_improvement'}
-
         recommend = request.form.get('recommend')
-        if recommend == None:
-            return 404, {"error": f'{status_code.field_error}recommend'}
         opinion = request.form.get('opinion')
         
         
