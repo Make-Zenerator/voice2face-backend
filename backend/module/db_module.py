@@ -170,9 +170,7 @@ def read_mz_result(mz_request_id, mz_result_id):
                 "voice_image_url": mz_result.voice_image_url,
                 "voice_gif_url": mz_result.voice_gif_url,
                 "condition_image_rating": mz_result.condition_image_rating,
-                "condition_gif_rating": mz_result.condition_gif_rating,
                 "voice_image_rating": mz_result.voice_image_rating,
-                "voice_gif_rating": mz_result.voice_gif_rating,
                 "created_at": mz_result.created_at.isoformat(),
                 "updated_at": mz_result.updated_at.isoformat() if mz_result.updated_at else None
             }

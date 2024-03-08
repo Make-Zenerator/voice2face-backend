@@ -139,10 +139,8 @@ class MzRequestClass(Resource):
 ####################################생성된 결과#######################################
 
 patch_parser = common_parser.copy()
-patch_parser.add_argument('condition_image_rating', location='form', required=False)
-patch_parser.add_argument('condition_gif_rating', location='form', required=False)
-patch_parser.add_argument('voice_image_rating', location='form', required=False)
-patch_parser.add_argument('voice_gif_rating', location='form', required=False)
+patch_parser.add_argument('type', location='form', required=False)
+patch_parser.add_argument('rating', location='form', required=False)
 # parser.add_argument('file', type=FileStorage, location='files', required=False)
 
 @MzRequest.route('/<int:mzRequestId>/mz-result', methods=['POST'])
