@@ -182,7 +182,7 @@ class MzResultClass(Resource):
             print(ex)
             print("******************")
 
-@MzRequest.route('/<int:mzRequestId>/mz-result/<int:mzResultId>', methods=['GET', 'PATCH'])
+@MzRequest.route('/<int:mzRequestId>/mz-result/<int:mzResultId>', methods=['GET', 'POST', 'PATCH'])
 @MzRequest.doc(responses={200: 'Success'})
 @MzRequest.doc(responses={404: 'Failed'})
 class MzResultClass(Resource):
