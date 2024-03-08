@@ -143,6 +143,21 @@ patch_parser.add_argument('type', location='form', required=False)
 patch_parser.add_argument('rating', location='form', required=False)
 # parser.add_argument('file', type=FileStorage, location='files', required=False)
 
+survey_parser = common_parser.copy()
+survey_parser.add_argument('user_phone', location='form', required=False)
+survey_parser.add_argument('sns_time', location='form', required=False)
+survey_parser.add_argument('image_rating_reason', location='form', required=False)
+survey_parser.add_argument('voice_to_face_rating', location='form', required=False)
+survey_parser.add_argument('dissatisfy_reason', location='form', required=False)
+survey_parser.add_argument('additional_function', location='form', required=False)
+survey_parser.add_argument('face_to_gif_rating', location='form', required=False)
+survey_parser.add_argument('more_gif', location='form', required=False)
+survey_parser.add_argument('more_gif_type', location='form', required=False)
+survey_parser.add_argument('waiting', location='form', required=False)
+survey_parser.add_argument('waiting_improvement', location='form', required=False)
+survey_parser.add_argument('recommend', location='form', required=False)
+survey_parser.add_argument('opinion', location='form', required=False)
+
 @MzRequest.route('/<int:mzRequestId>/mz-result', methods=['POST'])
 @MzRequest.doc(responses={200: 'Success'})
 @MzRequest.doc(responses={404: 'Failed'})
@@ -191,6 +206,25 @@ class MzResultClass(Resource):
             print(ex)
             print("******************")
     
+    @MzRequest.expect(survey_parser)
+    def post(self, mzRequestId, mzResultId):
+        """
+        # mz 설문조사 결과 정보 저장하기
+        # @header : token
+        # @return : {"mz_result_id": "id", "mz_survey_id": "id"}
+        """
+        try:
+            result, message = crud_module.upload_mz_survey(mzRequestId, mzResultId)
+            return Response(
+                response = json.dumps(message),
+                status = result,
+                mimetype = "application/json"
+            )
+        except Exception as ex:
+            print("******************")
+            print(ex)
+            print("******************")
+
     @MzRequest.expect(patch_parser)
     def patch(self, mzRequestId, mzResultId):
         """

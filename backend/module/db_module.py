@@ -222,6 +222,44 @@ def update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num
         print(ex)
         return 400, {"error": str(ex)} #false->400
 
+################### MZ SURVEY ###################
+def create_mz_survey(result_id,
+                        user_phone,
+                        sns_time, 
+                        image_rating_reason,
+                        voice_to_face_rating,
+                        dissatisfy_reason,
+                        additional_function,
+                        face_to_gif_rating,
+                        more_gif,
+                        more_gif_type,
+                        waiting,
+                        waiting_improvement,
+                        recommend,
+                        opinion):
+    try:
+        new_mz_survey = schema.MzSurvey(mz_result_id=result_id,
+                                        user_phone=user_phone,
+                                        sns_time=sns_time,
+                                        image_rating_reason=image_rating_season,
+                                        voice_to_face_rating=voice_to_face_rating,
+                                        dissatisfy_reason=dissatisfy_reason,
+                                        additional_function=additional_function,
+                                        face_to_gif_rating=face_to_gif_rating,
+                                        more_gif=more_gif,
+                                        more_gif_type=more_gif_type,
+                                        waiting=waiting,
+                                        waiting_improvement=waiting_improvement,
+                                        recommend=recommend,
+                                        opinion=opinion, 
+                                        created_at=datetime.now(timezone('Asia/Seoul')))
+        db.session.add(new_mz_survey)
+        db.session.commit()
+        return 200, {"mz_result_id" : str(mz_result_id), "mz_survey_id" : str(new_mz_survey.id)} #true->200
+    except Exception as ex:
+        db.session.rollback()
+        print(ex)
+        return 400, {"error": str(ex)} #false->400
 # """
 # * WhitelistFaceImage delete
 # """
