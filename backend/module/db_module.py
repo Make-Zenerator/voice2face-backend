@@ -255,7 +255,7 @@ def create_mz_survey(result_id,
                                         created_at=datetime.now(timezone('Asia/Seoul')))
         db.session.add(new_mz_survey)
         db.session.commit()
-        return 200, {"mz_result_id" : str(mz_result_id), "mz_survey_id" : str(new_mz_survey.id)} #true->200
+        return 200, {"mz_result_id" : str(result_id), "mz_survey_id" : str(new_mz_survey.id)} #true->200
     except Exception as ex:
         db.session.rollback()
         print(ex)
