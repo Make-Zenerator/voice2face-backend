@@ -197,7 +197,20 @@ def upload_mz_survey(mz_request_id, mz_result_id):
         opinion = request.form.get('opinion')
         
         
-        result, message = module.db_module.create_mz_survey(user, age, gender, voice_url, status, ata)
+        result, message = module.db_module.create_mz_survey(mz_result_id,
+                                                            user_phone,
+                                                            sns_time, 
+                                                            image_rating_reason,
+                                                            voice_to_face_rating,
+                                                            dissatisfy_reason,
+                                                            additional_function,
+                                                            face_to_gif_rating,
+                                                            more_gif,
+                                                            more_gif_type,
+                                                            waiting,
+                                                            waiting_improvement,
+                                                            recommend,
+                                                            opinion)
         return result, message
     except Exception as ex:
         print(ex)
