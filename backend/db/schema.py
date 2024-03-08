@@ -84,11 +84,11 @@ class MzSurvey(db.Model):
     dissatisfy_reason = db.Column(db.String(10), nullable=True) # 복수 선택
     additional_function = db.Column(db.Text, nullable=True)
     face_to_gif_rating = db.Column(db.Integer, nullable=True)
-    more_gif = db.Column(db.Boolean, nullable=True)
+    more_gif = db.Column(db.Integer, nullable=True)
     more_gif_type = db.Column(db.String(10), nullable=True) # 복수 선택
-    waiting = db.Column(db.Boolean, nullable=True)
+    waiting = db.Column(db.Integer, nullable=True)
     waiting_improvement = db.Column(db.Integer, nullable=True)
-    recommend = db.Column(db.Boolean, nullable=True)
+    recommend = db.Column(db.Integer, nullable=True)
     opinion = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.TIMESTAMP, nullable=True)
     updated_at = db.Column(db.TIMESTAMP, nullable=True)
