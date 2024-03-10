@@ -172,7 +172,8 @@ def read_mz_result(mz_request_id, mz_result_id):
                 "condition_image_rating": mz_result.condition_image_rating,
                 "voice_image_rating": mz_result.voice_image_rating,
                 "created_at": mz_result.created_at.isoformat(),
-                "updated_at": mz_result.updated_at.isoformat() if mz_result.updated_at else None
+                "updated_at": mz_result.updated_at.isoformat() if mz_result.updated_at else None,
+                "survey" : mz_result.survey,
             }
             return 200, {"mz_result": result_data} #true->200
         else:
