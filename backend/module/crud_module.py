@@ -33,8 +33,8 @@ def upload_mz_request():
             return 401, {"error": status_code.token_error}
         # check the number of requests
         result, message = module.db_module.count_mz_request_list(user)
+        print(result, message)
         if result == 200:
-            print(message.request_count)
             if message.request_count > REQUEST_LIMIT:
                 return 404, {"error": message.request_count}
         else:
