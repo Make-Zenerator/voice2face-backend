@@ -65,7 +65,7 @@ class MzResult(db.Model):
     condition_gif_score = db.Column(db.Float, nullable=True)
     voice_image_score = db.Column(db.Float, nullable=True)
     voice_gif_score = db.Column(db.Float, nullable=True)
-    survey = db.Column(db.Boolean, default=False)
+    survey = db.Column(db.Integer, default=0)
     created_at = db.Column(db.TIMESTAMP, nullable=False)
     updated_at = db.Column(db.TIMESTAMP, nullable=True)
     deleted_at = db.Column(db.TIMESTAMP, nullable=True)

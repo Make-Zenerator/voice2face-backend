@@ -222,6 +222,23 @@ def update_mz_result_rating(mz_request_id, mz_result_id, rating_type, rating_num
         db.session.rollback()
         print(ex)
         return 400, {"error": str(ex)} #false->400
+"""
+* mz result survey update
+"""
+def update_mz_result_survey(mz_request_id, mz_result_id, survey):
+    try:
+        mz_result = schema.MzResult.query.filter_by(mz_request_id = mz_request_id, id=mz_result_id, deleted_at=None).first()
+        if mz_result:
+            mz_result.survey = survey
+            mz_result.updated_at = datetime.now(timezone('Asia/Seoul'))
+            db.session.commit()
+            return 200, {"message": "rating updated successfully"} #true->200
+        else:
+            return 404, {"error": str("Can't find mz result")}
+    except Exception as ex:
+        db.session.rollback()
+        print(ex)
+        return 400, {"error": str(ex)} #false->400
 
 ################### MZ SURVEY ###################
 def create_mz_survey(result_id,

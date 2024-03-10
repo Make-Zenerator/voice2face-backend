@@ -211,6 +211,8 @@ def upload_mz_survey(mz_request_id, mz_result_id):
                                                             waiting_improvement,
                                                             recommend,
                                                             opinion)
+        _, _ = update_mz_result_survey(mz_request_id, mz_result_id, 1)
+        
         return result, message
     except Exception as ex:
         print(ex)
