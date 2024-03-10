@@ -59,7 +59,7 @@ def count_mz_request_list(user_id):
     try:
         mz_request_list = schema.MzRequest.query.filter(schema.MzRequest.user_id==user_id,
                                                         schema.MzRequest.deleted_at==None, 
-                                                        schema.MzRequest.status!='FAILED').all()                                            
+                                                        schema.MzRequest.status!='Failed').all()                                            
         if mz_request_list == None:
             request_count = 0
         else:
