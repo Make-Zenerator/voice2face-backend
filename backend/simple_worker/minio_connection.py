@@ -29,12 +29,14 @@ def minio_list_object(storage, age, gender):
     try:
         prefix = "output_condition/"
         obj_list = storage.list_objects(BUCKET_NAME, prefix)
-        if obj_list == None:
-            print("NOTHING!!!")
+        print(type(obj_list))
         contents_list = obj_list['Contents']
+        print(type(contents_list))
         file_list = [content['Key'] for content in contents_list]
+        print(type(file_list))
         condition_file_list = []
         for file in file_list:
+            print(type(file))
             _, file_name = file.split('-')
             idx = file_name.rindex('.')
             print(file_name)
