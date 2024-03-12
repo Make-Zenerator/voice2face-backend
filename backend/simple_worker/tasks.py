@@ -1,7 +1,7 @@
 import time
 from celery import Celery
 from celery.utils.log import get_task_logger
-# import requests
+import requests
 from db_config import USERNAME, PASSWORD, HOST, DATABASE
 import requests
 import module
@@ -27,8 +27,14 @@ def run_mz(request_id, result_id, age, gender, file_url):
         if result:
             condition_image_url = message['image']
             condition_gif_url = message['gif']
+            print(condition_image_url, condition_gif_url)
         else:
-            return 400
+            condition_image_url = None
+            condition_gif_url = None
+
+            # Update status
+            status_to_change = 'Failed'
+            result, message = module.db_module.update_mz_request_status(request_id, status_to_change)
 
         voice_image_url = None
         voice_gif_url = None
@@ -60,6 +66,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
             'voice_image_url' : voice_image_url,
             'voice_gif_url' : response.voice_image_url
         }
+        print(result_to_change)
         result, message = module.db_module.update_mz_result_image_gif(request_id, result_to_change)
         logger.info(message)
 
