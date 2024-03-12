@@ -1,5 +1,5 @@
 import pymysql
-from db.db_config import USERNAME, PASSWORD, HOST, DATABASE
+from db_config import USERNAME, PASSWORD, HOST, DATABASE
 
 class Database(): 
     def __init__(self):
