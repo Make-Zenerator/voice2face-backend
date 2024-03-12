@@ -6,12 +6,12 @@ services:
     container_name: backend
     image: "makezenerator/backend"
     ports:
-      - 5050:5050
+      - 80:80
     env_file:
       .env.prod
     environment:
       FLASK_DEBUG: 1 #리로딩 설정
-    command: gunicorn -w 1 -b 0.0.0.0:5050 app:app --reload
+    command: gunicorn -w 1 -b 0.0.0.0:80 app:app --reload
 
   rabbitmq:
     container_name: rabbitmq
