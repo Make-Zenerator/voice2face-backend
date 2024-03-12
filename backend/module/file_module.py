@@ -1,5 +1,5 @@
-from bucket.m_connection import s3_connection, s3_put_object
-from bucket.m_config import AWS_S3_BUCKET_NAME, AWS_S3_BUCKET_URL
+from bucket.m_connection import storage_connection, storage_put_object
+from bucket.m_config import BUCKET_NAME, MINIO_API_HOST
 from datetime import datetime
 from pytz import timezone
 import os
@@ -15,14 +15,14 @@ def file_upload(request_id, result_id, collctionName, f):
         # 2. 파일명 설정
         name, ext = os.path.splitext(f.filename)
         fileTime = datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d')
-        filename = f"{int(request_id):05}" + "_" + f"{int(result_id):05}" + "_" + name + "_" + fileTime + ext
+        filename = f"{int(request_id):05}" + "_" + f"{int(result_id):05}" + "_voice_" + fileTime + ext
         
         # 3. 버킷 연결
-        s3 = s3_connection()
+        storage = storage_connection()
         
         # 4. 버킷에 파일 저장
-        ret = s3_put_object(s3, AWS_S3_BUCKET_NAME, f.filename, f'{collctionName}/{filename}')
-        location = f'{AWS_S3_BUCKET_URL}/{collctionName}/{filename}'
+        ret = storage_put_object(storage, f'{collctionName}/{filename}', f.filename)
+        location = f'{MINIO_API_HOST}/{BUCKET_NAME}/{collctionName}/{filename}'
 
         # 5. local에 저장된 파일 삭제
         os.remove(f.filename)
@@ -38,7 +38,7 @@ def file_upload(request_id, result_id, collctionName, f):
         
         # 6. 버킷에 파일 저장 실패 시 진행 (ret == False 일 경우)
         else:
-            return False, {"error":"Can't saved in s3 bucket"} #false ->400
+            return False, {"error":"Can't saved in minio bucket"} #false ->400
         
     except Exception as ex:
         print("******************")
