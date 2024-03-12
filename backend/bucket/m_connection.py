@@ -46,7 +46,7 @@ def minio_list_object(storage, age, gender):
     :return: 성공 시 list 반환, 실패 시 False 반환
     '''
     try:
-        prefix = 
+        prefix = "output_condition"
         contents_list = storage.list_objects(bucket, prefix)['Contents']
         file_list = [content['Key'] for content in contents_list]
         condition_file_list = []
