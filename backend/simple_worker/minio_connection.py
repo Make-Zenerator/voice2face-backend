@@ -1,6 +1,7 @@
 from minio import Minio
 from minio_config import ACCESS_KEY, SECRET_KEY
 from minio_config import BUCKET_NAME, MINIO_API_HOST
+import random
 
 def minio_connection():
     try:
@@ -29,20 +30,15 @@ def minio_list_object(storage, age, gender):
     try:
         prefix = "output_condition/"
         obj_list = list(storage.list_objects(BUCKET_NAME, prefix))
-        contents_list = [obj.object_name for obj in obj_list]
-        print(contents_list)
-        
-        file_list = [content['Key'] for content in contents_list]
-        print(type(file_list))
+        file_list = [obj.object_name for obj in obj_list]
         condition_file_list = []
         for file in file_list:
-            print(type(file))
             _, file_name = file.split('-')
             idx = file_name.rindex('.')
             print(file_name)
             print(idx)
             if file_name[idx+1:] == 'jpg' and file_name[:idx] == f'{gender}_{age}':
-                condition_file_list.append(file)
+                condition_file_list.append(f"http://{MINIO_API_HOST}/{BUCKET_NAME}/{file}")
     except Exception as e:
         print(e)
         return False
