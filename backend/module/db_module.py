@@ -120,24 +120,24 @@ def update_mz_request_voice_url(mz_request_id, location):
         return 400, {"error": str(ex)} #false->400
 
 
-# """
-# * mz request status update
-# """
-# def update_mz_request_status(mz_request_id, task_status):
-#     try:
-#         mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first()
-#         if mz_request:
-#             mz_request.status = task_status
-#             if task_status == 'Success':
-#                 mz_request.updated_at = datetime.now(timezone('Asia/Seoul'))
-#             db.session.commit()
-#             return 200, {"message": "status updated sucessfully"}
-#         else:
-#             return 404, {"error": str("Can't find mz request")}
-#     except Exception as ex:
-#         db.session.rollback()
-#         print(ex)
-#         return 400, {"error": str(ex)} #false->400
+"""
+* mz request status update
+"""
+def update_mz_request_status(mz_request_id, task_status):
+    try:
+        mz_request = schema.MzRequest.query.filter_by(id = mz_request_id).first()
+        if mz_request:
+            mz_request.status = task_status
+            if task_status == 'Success':
+                mz_request.updated_at = datetime.now(timezone('Asia/Seoul'))
+            db.session.commit()
+            return 200, {"message": "status updated sucessfully"}
+        else:
+            return 404, {"error": str("Can't find mz request")}
+    except Exception as ex:
+        db.session.rollback()
+        print(ex)
+        return 400, {"error": str(ex)} #false->400
 
 
 ################### MZ RESULT ###################
