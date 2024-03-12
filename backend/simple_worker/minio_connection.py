@@ -30,7 +30,7 @@ def minio_list_object(storage, age, gender):
         prefix = "output_condition/"
         obj_list = storage.list_objects(BUCKET_NAME, prefix)
         print(type(obj_list))
-        contents_list = obj_list['Contents']
+        contents_list = dict(obj_list)['Contents']
         print(type(contents_list))
         file_list = [content['Key'] for content in contents_list]
         print(type(file_list))
