@@ -4,7 +4,8 @@ from celery.utils.log import get_task_logger
 import requests
 from db_config import USERNAME, PASSWORD, HOST, DATABASE
 import requests
-import module
+from module.file_module import read_random_condition
+from module.db_module import update_mz_request_status
 
 logger = get_task_logger(__name__)
 
@@ -23,7 +24,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
 
     try: 
         # condition output 
-        result, message = module.fild_module.read_random_condition(age, gender)
+        result, message = read_random_condition(age, gender)
         if result:
             condition_image_url = message['image']
             condition_gif_url = message['gif']
@@ -34,7 +35,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
 
             # Update status
             status_to_change = 'Failed'
-            result, message = module.db_module.update_mz_request_status(request_id, status_to_change)
+            result, message = update_mz_request_status(request_id, status_to_change)
 
         voice_image_url = None
         voice_gif_url = None
