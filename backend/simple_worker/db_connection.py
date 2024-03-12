@@ -25,9 +25,9 @@ class Database():
         voice_gif_url = task_result['voice_gif_url']
 
         self.cursor.execute('UPDATE mz_result \
-                SET condition_image_url = %s \
-                condition_gif_url = %s \
-                voice_image_url = %s \
+                SET condition_image_url = %s, \
+                condition_gif_url = %s, \
+                voice_image_url = %s, \
                 voice_gif_url = %s \
                 WHERE mz_request_id = %s', (condition_image_url, condition_gif_url, voice_image_url, voice_gif_url, mz_request_id))
         self.db.commit()
