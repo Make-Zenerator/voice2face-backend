@@ -28,7 +28,8 @@ def minio_list_object(storage, age, gender):
     '''
     try:
         prefix = "output_condition"
-        contents_list = list(storage.list_objects(BUCKET_NAME, prefix)['Contents'])
+        obj_list = storage.list_objects(BUCKET_NAME, prefix)
+        contents_list = obj_list['Contents']
         file_list = [content['Key'] for content in contents_list]
         condition_file_list = []
         for file in file_list:
