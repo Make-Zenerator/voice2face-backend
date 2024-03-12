@@ -4,14 +4,15 @@ from celery.utils.log import get_task_logger
 import requests
 from db_config import USERNAME, PASSWORD, HOST, DATABASE
 import requests
-from module.file_module import read_random_condition
-from module.db_module import update_mz_request_status
+from minio_connection import read_random_condition
+from db_connection import Database
 
 logger = get_task_logger(__name__)
 
 # Create a Celery instance named 'celery_app'
 # celery = Celery('tasks',backend='db+mysql+pymysql://root:rootpwd@mysql-db:3306/MZ', broker='amqp://admin:mypass@rabbit:5672')
 celery = Celery('tasks',backend=f'db+mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}', broker='amqp://admin:mypass@rabbit:5672')
+db = Database()
 
 @celery.task()
 def run_mz(request_id, result_id, age, gender, file_url):
@@ -28,14 +29,14 @@ def run_mz(request_id, result_id, age, gender, file_url):
         if result:
             condition_image_url = message['image']
             condition_gif_url = message['gif']
-            print(condition_image_url, condition_gif_url)
+            logger.info(condition_image_url, condition_gif_url)
         else:
             condition_image_url = None
             condition_gif_url = None
 
             # Update status
             status_to_change = 'Failed'
-            result, message = update_mz_request_status(request_id, status_to_change)
+            result, message = db.update_mz_request_status(request_id, status_to_change)
 
         voice_image_url = None
         voice_gif_url = None
@@ -68,7 +69,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
             'voice_gif_url' : response.voice_image_url
         }
         print(result_to_change)
-        result, message = module.db_module.update_mz_result_image_gif(request_id, result_to_change)
+        result, message = db.update_mz_result_image_gif(request_id, result_to_change)
         logger.info(message)
 
     except requests.RequestException as e:
