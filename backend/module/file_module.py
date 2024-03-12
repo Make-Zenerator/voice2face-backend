@@ -65,6 +65,7 @@ def read_random_condition(age, gender):
         if ret == False:
             return False, {"error":"Can't find list"} #false ->400 
         else:
+            print(ret)
             choicejpg = random.choice(ret)
             idx = choicejpg.rindex('.')
             choicemp4 = choicejpg[:idx] + '.mp4'
