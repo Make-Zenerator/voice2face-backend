@@ -54,7 +54,7 @@ def minio_list_object(storage, age, gender):
             _, file_name = file.split('-')
             idx = file_name.rindex('.')
             if file_name[idx+1:] == 'jpg' and file_name[:idx] == f'{gender}_{age}':
-            condition_file_list.append(file)
+                condition_file_list.append(file)
     except Exception as e:
         print(e)
         return False
