@@ -13,6 +13,6 @@ RUN pip install -r /requirements.txt
 ADD . /simple_worker
 WORKDIR /simple_worker
 
-ENTRYPOINT celery -A tasks worker --loglevel=info
+CMD ["celery", "-A", "tasks", "worker", "--loglevel=info"]
 #-Q celery_worker
 #ENTRYPOINT ['celery','-A','test_celery', 'worker', '--loglevel=info']
