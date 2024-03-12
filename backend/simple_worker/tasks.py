@@ -22,7 +22,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
     target_server_url = ''
     params = {'age' : age, 'gender' : gender, 'voice_url': file_url, 'request_id' : request_id, 'result_id' : result_id}
     logger.info(params)
-    
+
     try: 
         # condition output 
         result, message = read_random_condition(age, gender)
@@ -71,7 +71,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
             'condition_image_url' : condition_image_url,
             'condition_gif_url' : condition_gif_url,
             'voice_image_url' : voice_image_url,
-            'voice_gif_url' : response.voice_image_url
+            'voice_gif_url' : voice_image_url
         }
         print(result_to_change)
         db.update_mz_result_image_gif(request_id, result_to_change)
