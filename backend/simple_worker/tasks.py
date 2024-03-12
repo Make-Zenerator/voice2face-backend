@@ -18,11 +18,11 @@ db = Database()
 def run_mz(request_id, result_id, age, gender, file_url):
     logger.info('Got Request - Starting work')
     time.sleep(4)
-    logger.info(str(age), gender, file_url)
 
     target_server_url = ''
     params = {'age' : age, 'gender' : gender, 'voice_url': file_url, 'request_id' : request_id, 'result_id' : result_id}
-
+    logger.info(params)
+    
     try: 
         # condition output 
         result, message = read_random_condition(age, gender)

@@ -1,3 +1,4 @@
+from minio import Minio
 from minio_config import ACCESS_KEY, SECRET_KEY
 from minio_config import BUCKET_NAME, MINIO_API_HOST
 
