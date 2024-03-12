@@ -1,4 +1,4 @@
-from bucket.m_connection import storage_connection, storage_put_object
+from bucket.m_connection import minio_connection, minio_put_object
 from bucket.m_config import BUCKET_NAME, MINIO_API_HOST
 from datetime import datetime
 from pytz import timezone
@@ -18,10 +18,10 @@ def file_upload(request_id, result_id, collctionName, f):
         filename = f"{int(request_id):05}" + "_" + f"{int(result_id):05}" + "_voice_" + fileTime + ext
         
         # 3. 버킷 연결
-        storage = storage_connection()
+        storage = minio_connection()
         
         # 4. 버킷에 파일 저장
-        ret = storage_put_object(storage, f'{collctionName}/{filename}', f.filename)
+        ret = minio_put_object(storage, f'{collctionName}/{filename}', f.filename)
         location = f'{MINIO_API_HOST}/{BUCKET_NAME}/{collctionName}/{filename}'
 
         # 5. local에 저장된 파일 삭제
