@@ -2,6 +2,7 @@ from bucket.m_connection import minio_connection, minio_put_object
 from bucket.m_config import BUCKET_NAME, MINIO_API_HOST
 from datetime import datetime
 from pytz import timezone
+import random 
 import os
 
 """
@@ -39,6 +40,35 @@ def file_upload(request_id, result_id, collctionName, f):
         # 6. 버킷에 파일 저장 실패 시 진행 (ret == False 일 경우)
         else:
             return False, {"error":"Can't saved in minio bucket"} #false ->400
+        
+    except Exception as ex:
+        print("******************")
+        print(ex)
+        print("******************")
+        return False, {"error" : str(ex)}  #false -> 400
+
+"""
+* condition image 및 gif 파일 읽고 랜덤 선정
+"""
+def read_random_condition(age, gender):
+    try:
+        # 1. age 반올림
+        age = round(age, -1)
+        
+        # 2. 버킷 연결
+        storage = minio_connection()
+        
+        # 3. 버킷에서 리스트 가져오기 
+        ret = minio_list_object(storage, age, gender)
+
+        # 4. 버킷에서 리스트 가져오기 성공 시 랜덤 선정 
+        if ret == False:
+            return False, {"error":"Can't find list"} #false ->400 
+        else:
+            choicejpg = random.choice(ret)
+            idx = choicejpg.rindex('.')
+            choicemp4 = choicejpg[:idx] + '.mp4'
+            return True, {"image" : choicejpg, "gif" : choicemp4}
         
     except Exception as ex:
         print("******************")
