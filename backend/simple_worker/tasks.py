@@ -18,7 +18,7 @@ db = Database()
 def run_mz(request_id, result_id, age, gender, file_url):
     logger.info('Got Request - Starting work')
     time.sleep(4)
-    logger.info(age, gender, file_url)
+    logger.info(str(age), gender, file_url)
 
     target_server_url = ''
     params = {'age' : age, 'gender' : gender, 'voice_url': file_url, 'request_id' : request_id, 'result_id' : result_id}
@@ -30,19 +30,24 @@ def run_mz(request_id, result_id, age, gender, file_url):
             condition_image_url = message['image']
             condition_gif_url = message['gif']
             logger.info(condition_image_url, condition_gif_url)
+
+            # Update status
+            status_to_change = 'Success'
+            db.update_mz_request_status(request_id, status_to_change)
         else:
             condition_image_url = None
             condition_gif_url = None
 
             # Update status
             status_to_change = 'Failed'
-            result, message = db.update_mz_request_status(request_id, status_to_change)
+            db.update_mz_request_status(request_id, status_to_change)
 
         voice_image_url = None
         voice_gif_url = None
 
         # # voice output
         # response = requests.get(target_server_url, params = params)
+        # logger.info('response : ', response)
 
         # if response.status_code == 200: # 성공 시 
         #     voice_image_url = response.voice_image_url
@@ -69,8 +74,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
             'voice_gif_url' : response.voice_image_url
         }
         print(result_to_change)
-        result, message = db.update_mz_result_image_gif(request_id, result_to_change)
-        logger.info(message)
+        db.update_mz_result_image_gif(request_id, result_to_change)
 
     except requests.RequestException as e:
         return f'Request failed with exception: {str(e)}'
@@ -79,20 +83,3 @@ def run_mz(request_id, result_id, age, gender, file_url):
     # return response.status_code
     return 200
 
-# def s3_list_object(s3, bucket, age, gender):
-#     try:
-#         prefix = "Dataset/test/SF2F/Condition/selected_image/"
-#         contents_list = s3.list_objects(bucket, prefix)['Contents']
-#         file_list = [content['Key'] for content in contents_list]
-#         condition_file_list = []
-#         for file in file_list:
-#             _, file_name = file.split('-')
-#             idx = file_name.rindex('.')
-#             if file_name[idx+1:] == 'jpg' and file_name[:idx] == f'{gender}_{age}':
-#                 condition_file_list.append(file)
-
-
-#     except Exception as e:
-#         print(e)
-#         return False
-#     return True
