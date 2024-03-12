@@ -4,7 +4,7 @@ from db_config import USERNAME, PASSWORD, HOST, DATABASE
 class Database(): 
     def __init__(self):
         self.db = pymysql.connect(
-            host=HOST,
+            host=HOST[:-5],
             port=3306,
             user=USERNAME,
             passwd=PASSWORD,
