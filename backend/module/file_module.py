@@ -22,7 +22,7 @@ def file_upload(request_id, result_id, collctionName, f):
         
         # 4. 버킷에 파일 저장
         ret = minio_put_object(storage, f'{collctionName}/{filename}', f.filename)
-        location = f'{MINIO_API_HOST}/{BUCKET_NAME}/{collctionName}/{filename}'
+        location = f'http://{MINIO_API_HOST}/{BUCKET_NAME}/{collctionName}/{filename}'
 
         # 5. local에 저장된 파일 삭제
         os.remove(f.filename)
