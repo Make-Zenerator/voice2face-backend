@@ -12,14 +12,14 @@ class Database():
         )
         self.cursor = self.db.cursor()
 
-    def update_mz_request_status(request_id, status_to_change):
+    def update_mz_request_status(self, request_id, status_to_change):
         query = 'UPDATE mz_request \
                 SET status = %s \
                 WHERE id = %s', (status_to_change, request_id)
         self.cursor.execute(query)
         self.db.commit()
 
-    def update_mz_result_image_gif(mz_request_id, task_result):
+    def update_mz_result_image_gif(self,mz_request_id, task_result):
         condition_image_url = task_result['condition_image_url']
         condition_gif_url = task_result['condition_gif_url']
         voice_image_url = task_result['voice_image_url']
