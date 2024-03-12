@@ -13,10 +13,9 @@ class Database():
         self.cursor = self.db.cursor()
 
     def update_mz_request_status(self, request_id, status_to_change):
-        query = 'UPDATE mz_request \
+        self.cursor.execute('UPDATE mz_request \
                 SET status = %s \
-                WHERE id = %s', (status_to_change, request_id)
-        self.cursor.execute(query)
+                WHERE id = %s', (status_to_change, request_id))
         self.db.commit()
 
     def update_mz_result_image_gif(self,mz_request_id, task_result):
@@ -24,11 +23,11 @@ class Database():
         condition_gif_url = task_result['condition_gif_url']
         voice_image_url = task_result['voice_image_url']
         voice_gif_url = task_result['voice_gif_url']
-        query = 'UPDATE mz_result \
+
+        self.cursor.execute('UPDATE mz_result \
                 SET condition_image_url = %s \
                 condition_gif_url = %s \
                 voice_image_url = %s \
                 voice_gif_url = %s \
-                WHERE mz_request_id = %s', (condition_image_url, condition_gif_url, voice_image_url, voice_gif_url, mz_request_id)
-        self.cursor.execute(query)
+                WHERE mz_request_id = %s', (condition_image_url, condition_gif_url, voice_image_url, voice_gif_url, mz_request_id))
         self.db.commit()
