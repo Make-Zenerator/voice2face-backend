@@ -35,7 +35,7 @@ def minio_put_object(storage, filename, data):
 def read_random_condition(age, gender):
     try:
         # 1. age 반올림
-        age = round(age, -1)
+        age = round(int(age), -1)
         
         # 2. 버킷 연결
         storage = minio_connection()
