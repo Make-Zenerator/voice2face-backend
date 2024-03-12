@@ -25,6 +25,7 @@ jobs:
 
       - name: Create .env file
         run: |
+          cd backend
           echo "AWS_ACCESS_KEY = ${{secrets.AWS_ACCESS_KEY}}" > .env.prod
           echo "AWS_SECRET_ACCESS_KEY = ${{secrets.AWS_SECRET_ACCESS_KEY}}" > .env.prod
           echo "MINIO_BUCKET = ${{secrets.MINIO_BUCKET}}" > .env.prod
