@@ -4,6 +4,9 @@ from bucket.m_config import BUCKET_NAME, MINIO_API_HOST
 
 def minio_connection():
     try:
+        print(MINIO_API_HOST)
+        print(ACCESS_KEY)
+        print(SECRET_KEY)
         storage = Minio(
             MINIO_API_HOST,
             ACCESS_KEY,
