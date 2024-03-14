@@ -33,12 +33,12 @@ api.add_namespace(User.Users, '/users')
 api.add_namespace(User.Auth, '/auth')
 api.add_namespace(MzRequest.MzRequest, '/mz-request')
 
-@app.before_request
-def before_request():
-    if request.url.startswith('http://'):
-        url = request.url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(url, code=code)
+# @app.before_request
+# def before_request():
+#     if request.url.startswith('http://'):
+#         url = request.url.replace('http://', 'https://', 1)
+#         code = 301
+#         return redirect(url, code=code)
 
 # @app.route('/users', methods=['OPTIONS'])
 # @app.route('/auth', methods=['OPTIONS'])
@@ -52,6 +52,7 @@ def before_request():
     #return response
 
 if __name__ == "__main__":
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-    ssl_context.load_cert_chain(certfile='newcert.pem', keyfile='newkey.pem')
-    app.run(port=5050, debug=True,ssl_context=ssl_context)
+#     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+#     ssl_context.load_cert_chain(certfile='newcert.pem', keyfile='newkey.pem')
+#     app.run(port=5050, debug=True,ssl_context=ssl_context)
+    app.run(port=5050, debug=True)
