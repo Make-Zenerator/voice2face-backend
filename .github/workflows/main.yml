@@ -43,5 +43,5 @@ jobs:
             # docker run -d -p 5050:5050 makezenerator/backend:latest
             cd voice2face-backend
             git pull origin main
-            docker compose -f /root/voice2face-backend/backend/docker-compose.prod.yml up -d 
+            docker compose -f /root/voice2face-backend/backend/docker-compose.yml up -d 
             docker image prune -f
