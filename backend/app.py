@@ -54,4 +54,4 @@ def before_request():
 if __name__ == "__main__":
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     ssl_context.load_cert_chain(certfile='newcert.pem', keyfile='newkey.pem')
-    app.run(port=443, debug=True,ssl_context=ssl_context)
+    app.run(port=5050, debug=True,ssl_context=ssl_context)
