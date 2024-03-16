@@ -5,3 +5,7 @@ migrations
 .env
 .env.dev
 .env.prod
+data/
+*.conf
+.sh
+certbot/
