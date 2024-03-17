@@ -35,10 +35,8 @@ def minio_list_object(storage, age, gender):
         for file in file_list:
             _, file_name = file.split('-')
             idx = file_name.rindex('.')
-            print(file_name)
-            print(idx)
             if file_name[idx+1:] == 'jpg' and file_name[:idx] == f'{gender}_{age}':
-                condition_file_list.append(f"http://{MINIO_API_HOST}/{BUCKET_NAME}/{file}")
+                condition_file_list.append(f"https://{MINIO_API_HOST}/{BUCKET_NAME}/{file}")
     except Exception as e:
         print(e)
         return False
