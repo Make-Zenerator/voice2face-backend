@@ -46,6 +46,8 @@ def read_random_condition(age, gender):
     try:
         # 1. age 반올림
         age = round(int(age), -1)
+        if age == 50:
+            age = 40
         
         # 2. 버킷 연결
         storage = minio_connection()
