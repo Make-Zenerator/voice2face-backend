@@ -11,7 +11,7 @@ def minio_connection():
             MINIO_API_HOST,
             ACCESS_KEY,
             SECRET_KEY,     
-            secure=False,
+            secure=True,
         )
     except Exception as e:
         print(e)
