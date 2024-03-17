@@ -27,9 +27,10 @@ def run_mz(request_id, result_id, age, gender, file_url):
         # condition output 
         result, message = read_random_condition(age, gender)
         if result:
-            condition_image_url = message['image']
-            condition_gif_url = message['gif']
-            logger.info(condition_image_url, condition_gif_url)
+            condition_image_url = str(message['image'])
+            condition_gif_url = str(message['gif'])
+            logger.info(condition_image_url)
+            logger.info(condition_gif_url)
 
         else:
             # Update status
@@ -42,8 +43,8 @@ def run_mz(request_id, result_id, age, gender, file_url):
         logger.info('response : ', response)
 
         if response.status_code == 200: # 성공 시 
-            voice_image_url = response.voice_image_url
-            voice_gif_url = response.voice_gif_url
+            voice_image_url = str(response.voice_image_url)
+            voice_video_url = str(response.voice_video_url)
 
         else: # 실패 시 
             # Update status
@@ -61,7 +62,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
             'condition_image_url' : condition_image_url,
             'condition_gif_url' : condition_gif_url,
             'voice_image_url' : voice_image_url,
-            'voice_gif_url' : voice_gif_url
+            'voice_gif_url' : voice_video_url
         }
         print(result_to_change)
         db.update_mz_result_image_gif(request_id, result_to_change)
