@@ -33,7 +33,7 @@ def upload_mz_request():
             return 401, {"error": status_code.token_error}
         # check the number of requests
         result, message = module.db_module.count_mz_request_list(user)
-        #print(result, message)
+        print(result, message)
         if result == 200:
             request_count = message['request_count']
             if request_count > REQUEST_LIMIT:
@@ -132,6 +132,23 @@ def regenerate_mz_result(mz_request_id):
             return result, message
 
         result, mz_result_id = module.db_module.create_mz_result(mz_request_id)
+        _, request_info = module.db_module.read_mz_request(mz_request_id, user_id)
+        if _ !=200:
+            return 400, {'error' : request_info['error']}
+        info = request_info['mz_request']
+        celery_task_id = celery.send_task('tasks.run_mz', kwargs= 
+                    {
+                        'request_id' : mz_request_id,
+                        'result_id' : mz_result_id,
+                        'age' : info['age'],
+                        'gender' : info['age'],
+                        'file_url' : info['age']
+                    })
+        
+        print("==========================")
+        print(celery_task_id)
+        print("==========================")
+
         return result, {"mz_request_id" : str(mz_request_id), "regenerate_mz_result_id" : str(mz_result_id)}
     except Exception as ex:
         print(ex)
