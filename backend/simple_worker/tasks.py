@@ -6,6 +6,7 @@ from db_config import USERNAME, PASSWORD, HOST, DATABASE
 import requests
 from minio_connection import read_random_condition
 from db_connection import Database
+import json
 
 logger = get_task_logger(__name__)
 
@@ -20,8 +21,12 @@ def run_mz(request_id, result_id, age, gender, file_url):
     time.sleep(4)
 
     target_server_url = 'https://175.106.97.56:3002/makevideo'
-    params = {'age' : age, 'gender' : gender, 'voice_url': file_url, 'request_id' : request_id, 'result_id' : result_id}
-    logger.info(params)
+    data = {'age' : age, 
+            'gender' : gender, 
+            'voice_url': file_url, 
+            'request_id' : request_id, 
+            'result_id' : result_id}
+    logger.info(data)
 
     try: 
         # condition output 
@@ -39,7 +44,8 @@ def run_mz(request_id, result_id, age, gender, file_url):
             return 400
 
         # voice output
-        response = requests.post(target_server_url, params = params)
+        headers = {"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36","Content-Type":"application/json"}
+        response = requests.post(target_server_url,data=json.dumps(data),headers=headers)
         logger.info('response : ', response)
 
         if response.status_code == 200: # 성공 시 
