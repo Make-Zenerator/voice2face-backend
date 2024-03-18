@@ -58,15 +58,16 @@ def run_mz(request_id, result_id, age, gender, file_url):
 
         else: # 실패 시 
             # Update status
+            error = response_data.get("error")
+            logger.info(error)
             status_to_change = 'Failed'
-            result, message = db.update_mz_request_status(request_id, status_to_change)
+            db.update_mz_request_status(request_id, status_to_change)
             return 400
 
         # Update status
         status_to_change = 'Success'
-        result, message = db.update_mz_request_status(request_id, status_to_change)
-        logger.info(message)
-
+        db.update_mz_request_status(request_id, status_to_change)
+        
         # Update result 
         result_to_change = {
             'condition_image_url' : condition_image_url,
