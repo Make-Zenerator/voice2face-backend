@@ -47,9 +47,10 @@ def run_mz(request_id, result_id, age, gender, file_url):
         headers = {"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36","Content-Type":"application/json"}
         response = requests.post(target_server_url,data=json.dumps(data),headers=headers)
         response_data = response.json()
-        logger.info(response_data.get("status_code"))
+        status_code = response_data.get("status_code")
+        logger.info(status_code)
 
-        if response.status_code == 200: # 성공 시 
+        if status_code == 200: # 성공 시 
             voice_image_url = str(response_data.get("voice_image_url"))
             voice_video_url = str(response_data.get("voice_video_url"))
             logger.info(voice_image_url)
