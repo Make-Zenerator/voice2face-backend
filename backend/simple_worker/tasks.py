@@ -62,7 +62,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
             logger.info(error)
             status_to_change = 'Failed'
             db.update_mz_request_status(request_id, status_to_change)
-            return 400
+        #     return 400
 
         # Update status
         status_to_change = 'Success'
@@ -72,8 +72,8 @@ def run_mz(request_id, result_id, age, gender, file_url):
         result_to_change = {
             'condition_image_url' : condition_image_url,
             'condition_gif_url' : condition_gif_url,
-            'voice_image_url' : voice_image_url,
-            'voice_gif_url' : voice_video_url
+            'voice_image_url' : "voice_image_url",
+            'voice_gif_url' : "voice_video_url"
         }
         print(result_to_change)
         db.update_mz_result_image_gif(request_id, result_to_change)
