@@ -79,6 +79,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
         db.update_mz_result_image_gif(request_id, result_to_change)
 
     except requests.RequestException as e:
+        logger.info(str(e))
         return f'Request failed with exception: {str(e)}'
 
     logger.info('Work Finished ')
