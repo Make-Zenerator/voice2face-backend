@@ -20,7 +20,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
     logger.info('Got Request - Starting work')
     time.sleep(4)
 
-    target_server_url = 'http://175.106.97.56:3002/makevideo'
+    target_server_url = 'http://223.130.141.160:3002/makevideo'
     data = {'age' : age, 
             'gender' : gender, 
             'voice_url': file_url, 
@@ -80,6 +80,8 @@ def run_mz(request_id, result_id, age, gender, file_url):
 
     except requests.RequestException as e:
         logger.info(str(e))
+        status_to_change = 'Failed'
+        db.update_mz_request_status(request_id, status_to_change)
         return f'Request failed with exception: {str(e)}'
 
     logger.info('Work Finished ')
