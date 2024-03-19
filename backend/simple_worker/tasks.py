@@ -62,7 +62,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
             logger.info(error)
             status_to_change = 'Failed'
             db.update_mz_request_status(request_id, status_to_change)
-        #     return 400
+            return 400
 
         # Update status
         status_to_change = 'Success'
