@@ -35,10 +35,8 @@ def minio_list_object(storage, age, gender):
         for file in file_list:
             _, file_name = file.split('-')
             idx = file_name.rindex('.')
-            print(file_name)
-            print(idx)
             if file_name[idx+1:] == 'jpg' and file_name[:idx] == f'{gender}_{age}':
-                condition_file_list.append(f"http://{MINIO_API_HOST}/{BUCKET_NAME}/{file}")
+                condition_file_list.append(f"https://{MINIO_API_HOST}/{BUCKET_NAME}/{file}")
     except Exception as e:
         print(e)
         return False
@@ -48,6 +46,8 @@ def read_random_condition(age, gender):
     try:
         # 1. age 반올림
         age = round(int(age), -1)
+        if age == 50:
+            age = 40
         
         # 2. 버킷 연결
         storage = minio_connection()

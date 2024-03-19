@@ -36,7 +36,7 @@ def upload_mz_request():
         print(result, message)
         if result == 200:
             request_count = message['request_count']
-            if request_count > REQUEST_LIMIT:
+            if request_count >= REQUEST_LIMIT:
                 return 404, {"error": request_count}
         else:
             return result, message 
