@@ -16,3 +16,4 @@ python-dotenv
 cryptography
 celery[redis]
 minio
+pydub
