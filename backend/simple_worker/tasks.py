@@ -56,7 +56,11 @@ def run_mz(request_id, result_id, age, gender, file_url):
             voice_video_url = str(response_data.get("voice_video_url"))
             logger.info(voice_image_url)
             logger.info(voice_video_url)
-
+        elif status_code == 404: # voice_image_url 만 받아온 경우 
+            voice_image_url = str(response_data.get("voice_image_url"))
+            logger.info(voice_image_url)
+            error = response_data.get("error")
+            raise Exception(error)
         else: # 실패 시 
             # Update status
             error = response_data.get("error")
