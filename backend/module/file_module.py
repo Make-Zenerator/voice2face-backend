@@ -2,50 +2,52 @@ from bucket.m_connection import minio_connection, minio_put_object
 from bucket.m_config import BUCKET_NAME, MINIO_API_HOST
 from datetime import datetime
 from pytz import timezone
+from pydub import AudioSegment
 import random 
 import os
 
 """
 * 파일 업로드
 """
-def file_upload(request_id, result_id, collctionName, f):
+def file_upload(request_id, result_id, collectionName, f):
     try:
-        # 1. local에 파일 저장 - 파일 경로 때문에 저장해야함
-        f.save(f.filename)
+        # 1. 파일 타입 확인
+        allowed_formats = ['audio/wav', 'audio/x-wav', 'audio/wave']
+        if f.mimetype not in allowed_formats:
+            return False, {"error": "Unsupported file format. Only WAV files are allowed."}
         
-        # 2. 파일명 설정
-        name, ext = os.path.splitext(f.filename)
+        # 2. 파일을 WAV 형식으로 변환
+        audio = AudioSegment.from_file(f)
+        # WAV 형식으로 변환 후 임시 파일로 저장 (원본 파일은 삭제)
+        temp_file = f.filename + '.wav'
+        audio.export(temp_file, format="wav")
+        
+        # 3. 파일명 설정
+        name, ext = os.path.splitext(temp_file)
         fileTime = datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d')
         filename = f"{int(request_id):05}" + "_" + f"{int(result_id):05}" + "_voice_" + fileTime + ext
         
-        # 3. 버킷 연결
+        # 4. 버킷 연결
         storage = minio_connection()
         
-        # 4. 버킷에 파일 저장
-        ret = minio_put_object(storage, f'{collctionName}/{filename}', f.filename)
-        location = f'https://{MINIO_API_HOST}/{BUCKET_NAME}/{collctionName}/{filename}'
+        # 5. 버킷에 파일 저장
+        ret = minio_put_object(storage, f'{collectionName}/{filename}', temp_file)
+        location = f'https://{MINIO_API_HOST}/{BUCKET_NAME}/{collectionName}/{filename}'
 
-        # 5. local에 저장된 파일 삭제
-        os.remove(f.filename)
+        # 6. 임시 파일 삭제
+        os.remove(temp_file)
             
-        # 6. 버킷에 파일 저장 성공 시 진행
-        if ret :
-            # 6-3. 성공 message return
-            if location != None:
-                return 200, location #true->200
-            else:
-                print("Can't find location")
-                return False, {"error":"Can't find location"} #false ->400 
-        
-        # 6. 버킷에 파일 저장 실패 시 진행 (ret == False 일 경우)
+        # 7. 버킷에 파일 저장 성공 시
+        if ret:
+            return 200, location
         else:
-            return False, {"error":"Can't saved in minio bucket"} #false ->400
+            return False, {"error": "Failed to save file in minio bucket."}
         
     except Exception as ex:
         print("******************")
         print(ex)
         print("******************")
-        return False, {"error" : str(ex)}  #false -> 400
+        return False, {"error": str(ex)}
 
 # """
 # * condition image 및 gif 파일 읽고 랜덤 선정
