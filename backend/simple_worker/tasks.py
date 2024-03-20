@@ -14,11 +14,6 @@ logger = get_task_logger(__name__)
 # celery = Celery('tasks',backend='db+mysql+pymysql://root:rootpwd@mysql-db:3306/MZ', broker='amqp://admin:mypass@rabbit:5672')
 celery = Celery('tasks',backend=f'db+mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}', broker='amqp://admin:mypass@rabbit:5672')
 db = Database()
-condition_image_url = None
-condition_video_url = None
-voice_image_url = None
-voice_video_url = None
-return_message = 200
 
 @celery.task()
 def run_mz(request_id, result_id, age, gender, file_url):
@@ -32,6 +27,11 @@ def run_mz(request_id, result_id, age, gender, file_url):
             'request_id' : request_id, 
             'result_id' : result_id}
     logger.info(data)
+    condition_image_url = None
+    condition_video_url = None
+    voice_image_url = None
+    voice_video_url = None
+    return_message = 200
 
     try: 
         # condition output 
