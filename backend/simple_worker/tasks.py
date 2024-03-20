@@ -14,6 +14,10 @@ logger = get_task_logger(__name__)
 # celery = Celery('tasks',backend='db+mysql+pymysql://root:rootpwd@mysql-db:3306/MZ', broker='amqp://admin:mypass@rabbit:5672')
 celery = Celery('tasks',backend=f'db+mysql+pymysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}', broker='amqp://admin:mypass@rabbit:5672')
 db = Database()
+condition_image_url = None
+condition_video_url = None
+voice_image_url = None
+voice_video_url = None
 
 @celery.task()
 def run_mz(request_id, result_id, age, gender, file_url):
@@ -33,16 +37,12 @@ def run_mz(request_id, result_id, age, gender, file_url):
         result, message = read_random_condition(age, gender)
         if result:
             condition_image_url = str(message['image'])
-            condition_gif_url = str(message['gif'])
+            condition_video_url = str(message['gif'])
             logger.info(condition_image_url)
-            logger.info(condition_gif_url)
-
+            logger.info(condition_video_url)
         else:
-            # Update status
-            status_to_change = 'Failed'
-            db.update_mz_request_status(request_id, status_to_change)
-            return 400
-
+            raise Exception('condition')
+        
         # voice output
         headers = {"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36","Content-Type":"application/json"}
         response = requests.post(target_server_url,data=json.dumps(data),headers=headers)
@@ -59,30 +59,31 @@ def run_mz(request_id, result_id, age, gender, file_url):
         else: # 실패 시 
             # Update status
             error = response_data.get("error")
-            logger.info(error)
-            status_to_change = 'Failed'
-            db.update_mz_request_status(request_id, status_to_change)
-            return 400
+            raise Exception(error)
 
-        # Update status
-        status_to_change = 'Success'
-        db.update_mz_request_status(request_id, status_to_change)
-        
-        # Update result 
-        result_to_change = {
-            'condition_image_url' : condition_image_url,
-            'condition_gif_url' : condition_gif_url,
-            'voice_image_url' : "voice_image_url",
-            'voice_gif_url' : "voice_video_url"
-        }
-        print(result_to_change)
-        db.update_mz_result_image_gif(request_id, result_to_change)
-
-    except requests.RequestException as e:
+    #except requests.RequestException as e:
+    except Exception as e:
         logger.info(str(e))
         status_to_change = 'Failed'
         db.update_mz_request_status(request_id, status_to_change)
-        return f'Request failed with exception: {str(e)}'
+        return f'failed with exception: {str(e)}'
+    
+    # Update result 
+    result_to_change = {
+        'condition_image_url' : condition_image_url,
+        'condition_gif_url' : condition_video_url,
+        'voice_image_url' : voice_image_url,
+        'voice_gif_url' : voice_video_url
+    }
+    logger.info(result_to_change)
+    db.update_mz_result_image_gif(request_id, result_to_change)
+
+    if None in [condition_image_url, condition_video_url, voice_image_url]:
+        status_to_change = 'Failed'
+    else:
+        status_to_change = 'Success'
+    logger.info(status_to_change)
+    db.update_mz_request_status(request_id, status_to_change)
 
     logger.info('Work Finished ')
     # return response.status_code
