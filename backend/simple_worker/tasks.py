@@ -64,8 +64,6 @@ def run_mz(request_id, result_id, age, gender, file_url):
     #except requests.RequestException as e:
     except Exception as e:
         logger.info(str(e))
-        status_to_change = 'Failed'
-        db.update_mz_request_status(request_id, status_to_change)
         return f'failed with exception: {str(e)}'
     
     # Update result 
