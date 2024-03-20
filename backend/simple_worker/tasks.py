@@ -18,6 +18,7 @@ condition_image_url = None
 condition_video_url = None
 voice_image_url = None
 voice_video_url = None
+return_message = 200
 
 @celery.task()
 def run_mz(request_id, result_id, age, gender, file_url):
@@ -64,7 +65,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
     #except requests.RequestException as e:
     except Exception as e:
         logger.info(str(e))
-        return f'failed with exception: {str(e)}'
+        return_message = 'failed with exception: {str(e)}'
     
     # Update result 
     result_to_change = {
@@ -85,5 +86,5 @@ def run_mz(request_id, result_id, age, gender, file_url):
 
     logger.info('Work Finished ')
     # return response.status_code
-    return 200
+    return return_message
 
