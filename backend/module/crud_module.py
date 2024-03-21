@@ -127,7 +127,7 @@ def regenerate_mz_result(mz_request_id):
         if user_id == False:
             return 401, {"error": status_code.token_error}
         # 다시 생성중으로 변경 
-        result, message = module.db_module.update_mz_request_status(mz_request_id, None)
+        result, message = module.db_module.update_mz_request_status(mz_request_id, 'Proceeding')
         if result != 200:
             return result, message
 
@@ -141,8 +141,8 @@ def regenerate_mz_result(mz_request_id):
                         'request_id' : mz_request_id,
                         'result_id' : mz_result_id,
                         'age' : info['age'],
-                        'gender' : info['age'],
-                        'file_url' : info['age']
+                        'gender' : info['gender'],
+                        'file_url' : info['voice_url']
                     })
         
         print("==========================")
