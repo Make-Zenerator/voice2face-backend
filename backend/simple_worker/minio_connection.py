@@ -1,5 +1,5 @@
 from minio import Minio
-from minio.error import ResponseError
+#from minio.error import ResponseError
 from minio_config import ACCESS_KEY, SECRET_KEY
 from minio_config import BUCKET_NAME, MINIO_API_HOST
 import random
@@ -72,11 +72,11 @@ def read_random_condition(age, gender):
         print("******************")
         return False, {"error" : str(ex)}  #false -> 400
     
-def check_object_existence(storage, bucket_name, object_name):
-    try:
-        # 객체 존재 여부 확인
-        storage.stat_object(bucket_name, object_name)
-        return True
-    except ResponseError as err:
-        if err.code == 'NoSuchKey':
-            return False
+# def check_object_existence(storage, bucket_name, object_name):
+#     try:
+#         # 객체 존재 여부 확인
+#         storage.stat_object(bucket_name, object_name)
+#         return True
+#     except ResponseError as err:
+#         if err.code == 'NoSuchKey':
+#             return False
