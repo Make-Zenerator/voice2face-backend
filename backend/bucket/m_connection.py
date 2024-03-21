@@ -29,7 +29,8 @@ def minio_put_object(storage, filename, data):
     :return: 성공 시 True, 실패 시 False 반환
     '''
     try:
-        storage.fput_object(BUCKET_NAME, filename, data, content_type="audio/wav")
+        #storage.fput_object(BUCKET_NAME, filename, data, content_type="audio/wav")
+        storage.fput_object(BUCKET_NAME, filename, data)
         print(f"{filename} is successfully uploaded to bucket {BUCKET_NAME}.")
     except Exception as e:
         print(e)
