@@ -26,7 +26,7 @@ def file_upload(request_id, result_id, collctionName, f):
         location = f'https://{MINIO_API_HOST}/{BUCKET_NAME}/{collctionName}/{filename}'
 
         # 5. local에 저장된 파일 삭제
-        #os.remove(f.filename)
+        os.remove(f.filename)
             
         # 6. 버킷에 파일 저장 성공 시 진행
         if ret :

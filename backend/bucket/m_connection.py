@@ -30,7 +30,7 @@ def minio_put_object(storage, filename, data):
     '''
     try:
         #storage.fput_object(BUCKET_NAME, filename, data, content_type="audio/wav")
-        storage.fput_object(BUCKET_NAME, filename, data, content_type='audio/mp4')
+        storage.fput_object(BUCKET_NAME, filename, data)
         print(f"{filename} is successfully uploaded to bucket {BUCKET_NAME}.")
     except Exception as e:
         print(e)
