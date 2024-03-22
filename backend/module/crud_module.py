@@ -20,7 +20,7 @@ celery.conf.update(
     # Do not ignore results (set to False)
     CELERY_IGNORE_RESULT=False,
 )
-REQUEST_LIMIT = 5
+REQUEST_LIMIT = 10
 ################### MZ REQUEST ###################
 """
 * TODO mz request upload
