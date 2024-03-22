@@ -20,7 +20,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
     logger.info('Got Request - Starting work')
     time.sleep(4)
 
-    target_server_url = 'http://223.130.141.160:3002/makevideo'
+    target_server_url = 'http://175.45.203.253:3002/makevideo'
     data = {'age' : age, 
             'gender' : gender, 
             'voice_url': file_url, 
