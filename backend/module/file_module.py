@@ -13,8 +13,8 @@ def file_upload(request_id, result_id, collctionName, f):
     try:
         # 1. local에 파일 저장 - 파일 경로 때문에 저장해야함
         f.save(f.filename)
-        subprocess.run(['ffmpeg', '-i', f.filename,
-                        '-acodec', 'pcm_s16le', '-ar', '48000', '-ac', '1', f.filename, '-y'])
+        # subprocess.run(['ffmpeg', '-i', f.filename,
+        #                 '-acodec', 'pcm_s16le', '-ar', '48000', '-ac', '1', f.filename, '-y'])
         
         # 2. 파일명 설정
         name, ext = os.path.splitext(f.filename)
