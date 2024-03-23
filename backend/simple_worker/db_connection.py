@@ -1,5 +1,7 @@
 import pymysql
 from db_config import USERNAME, PASSWORD, HOST, DATABASE
+from datetime import datetime
+from pytz import timezone
 
 class Database(): 
     def __init__(self):
@@ -12,10 +14,11 @@ class Database():
         )
         self.cursor = self.db.cursor()
 
-    def update_mz_request_status(self, request_id, status_to_change):
+    def update_mz_request_status_ata(self, request_id, status_to_change):
         self.cursor.execute('UPDATE mz_request \
-                SET status = %s \
-                WHERE id = %s', (status_to_change, request_id))
+                SET status = %s, \
+                ata = %s \
+                WHERE id = %s', (status_to_change, str(datetime.now(timezone('Asia/Seoul'))), request_id))
         self.db.commit()
 
     def update_mz_result_image_gif(self,mz_request_id, task_result):
