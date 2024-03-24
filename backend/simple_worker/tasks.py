@@ -86,7 +86,7 @@ def run_mz(request_id, result_id, age, gender, file_url):
     else:
         status_to_change = 'Success'
     logger.info(status_to_change)
-    db.update_mz_request_status(request_id, status_to_change)
+    db.update_mz_request_status_ata(request_id, status_to_change)
 
     logger.info('Work Finished ')
     # return response.status_code
