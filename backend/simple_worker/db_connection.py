@@ -10,7 +10,8 @@ class Database():
             port=3306,
             user=USERNAME,
             passwd=PASSWORD,
-            db=DATABASE
+            db=DATABASE,
+            init_command='SET SESSION wait_timeout = 86400'
         )
         self.cursor = self.db.cursor()
 
@@ -20,6 +21,7 @@ class Database():
                 ata = %s \
                 WHERE id = %s', (status_to_change, str(datetime.now(timezone('Asia/Seoul'))), request_id))
         self.db.commit()
+        
 
     def update_mz_result_image_gif(self,mz_request_id, task_result):
         condition_image_url = task_result['condition_image_url']
