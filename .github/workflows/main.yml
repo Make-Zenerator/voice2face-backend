@@ -44,4 +44,3 @@ jobs:
             cd voice2face-backend
             git pull origin main
             docker compose -f /root/voice2face-backend/backend/docker-compose.yml up -d 
-            docker image prune -f
