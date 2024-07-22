@@ -37,8 +37,7 @@ jobs:
           port: ${{secrets.SERVER_PORT}}
           script: | 
             echo "${{secrets.DOCKERHUB_PASSWORD}}" | sudo docker login -u "${{secrets.DOCKERHUB_USERNAME}}" --password-stdin
-            sudo cd /root/voice2face-backend
-            sudo docker compose -f backend/docker-compose.yml down
+            sudo docker compose -f /root/voice2face-backend/backend/docker-compose.yml down
             sudo docker pull makezenerator/backend:latest
             sudo docker pull makezenerator/simple_worker:latest
-            sudo docker compose -f backend/docker-compose.yml up -d
+            sudo docker compose -f /root/voice2face-backend/backend/docker-compose.yml up -d
