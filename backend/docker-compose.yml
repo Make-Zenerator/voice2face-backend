@@ -1,4 +1,3 @@
-version: '3'
 services:
   frontend:
     container_name: frontend
@@ -35,7 +34,6 @@ services:
   simple_worker:
     container_name: simple_worker
     image: "makezenerator/simple_worker"
-    user: nobody
     env_file:
       .env.prod
     depends_on:
@@ -47,12 +45,11 @@ services:
     image: nginx:latest
     restart: unless-stopped
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-      - ./conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./conf/makezenerator.com.conf:/etc/nginx/conf.d/makezenerator.com.conf
-      - ./conf/api.makezenerator.com.conf:/etc/nginx/conf.d/api.makezenerator.com.conf
-      - ./conf/model.makezenerator.com.conf:/etc/nginx/conf.d/model.makezenerator.com.conf
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+      - ./nginx//conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf/makezenerator.site.conf:/etc/nginx/conf.d/makezenerator.site.conf
+      - ./nginx/conf/api.makezenerator.site.conf:/etc/nginx/conf.d/api.makezenerator.site.conf
     ports:
       - 80:80
       - 443:443
@@ -63,6 +60,17 @@ services:
     image: certbot/certbot
     restart: unless-stopped
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  node:
+   image: prom/node-exporter
+   container_name: node-exporter
+   ports:
+     - 9100:9100
+   networks:
+     - promnet
+networks:
+  promnet:
+    driver: bridge
