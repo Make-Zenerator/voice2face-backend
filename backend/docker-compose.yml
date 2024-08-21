@@ -50,6 +50,7 @@ services:
       - ./nginx//conf/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf/makezenerator.site.conf:/etc/nginx/conf.d/makezenerator.site.conf
       - ./nginx/conf/api.makezenerator.site.conf:/etc/nginx/conf.d/api.makezenerator.site.conf
+      - ./nginx/conf/storage.makezenerator.site.conf:/etc/nginx/conf.d/storage.makezenerator.site.conf
     ports:
       - 80:80
       - 443:443
